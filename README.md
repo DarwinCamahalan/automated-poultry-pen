@@ -12,6 +12,15 @@
 
 ## HARDWARE CONFIGURATION:
 
+> MLX90640 PINS TO RASPBERRY PI
+
+| PIN NO.      | LABEL       |
+| -----------  | ----------- |
+| GND          | GND         |
+| 3V3          | VIN         |
+| 2            | SDA         |
+| 3            | SCL         |
+
 > DHT11 PINS TO RASPBERRY PI
 
 | PIN NO.      | LABEL       |
