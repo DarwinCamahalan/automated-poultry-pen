@@ -53,6 +53,13 @@
 | 5            | IN4         |
 
 
+## RASPBERRY PI 3 MODEL B V1.2 PINS
+
+![329800870_769578984791846_5458783927692876063_n](https://user-images.githubusercontent.com/120079195/233627070-a2ad264f-b04e-40ef-8d2b-aadf2713a473.jpg)
+
+
+
+
 
 
 	
