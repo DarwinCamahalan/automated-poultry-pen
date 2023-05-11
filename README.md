@@ -17,7 +17,7 @@
 | PIN NO.      | LABEL       |
 | -----------  | ----------- |
 | GND          | GND         |
-| 3V3          | VIN         |
+| 5V          | VIN         |
 | 2            | SDA         |
 | 3            | SCL         |
 
