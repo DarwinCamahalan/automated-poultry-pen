@@ -1,0 +1,50 @@
+<html>
+<head>
+  <title>Pi Thermal Video</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      setInterval(fetchSensorData, 1000);
+    });
+
+    function fetchSensorData() {
+      $.getJSON('/sensor-data', function(data) {
+        $('#temperature').text('Temperature: ' + data.temperature + '°C');
+        $('#humidity').text('Humidity: ' + data.humidity + '%');
+      });
+    }
+  </script>
+  <style>
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .video {
+      display: block;
+      margin: auto;
+    }
+
+    .data {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Pi Thermal Video</h1>
+    <img src="{{ url_for('video_feed') }}" class="video">
+  </div>
+  <div class="container">
+    <div class="data">
+      <p id="temperature">Temperature: -</p>
+      <p id="humidity">Humidity: -</p>
+    </div>
+  </div>
+</body>
+</html>
