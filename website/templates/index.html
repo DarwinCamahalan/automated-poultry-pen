@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poultry Monitoring System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+   <div class="navbar">
+       <p>Poultry Monitoring System</p>
+   </div>
+   <div class="mainContainer">    
+    <div class="centerContainer">
+        <div class="cameraContainer">
+            <img src="{{ url_for('static', filename='sample.gif') }}" alt="camera">
+        </div>
+        <div class="infoContainer">  
+            <div class="day">    
+                <h5>DAY 1</h5>      
+            </div>
+            
+            <div class="dht">    
+                <h5>DHT11</h5>      
+                <p>Temperature: <span id="dht-temperature">{{ temperature }} °C</span></p>
+                <p>Humidity: <span id="dht-humidity">{{ humidity }} %</span></p>
+            </div>
+
+            <div class="camera">    
+                <h5>MLX90640</h5>      
+                <p>Temperature: <span id="dht-temperature">{{ temperature }} °C</span></p>
+                <p>Humidity: <span id="dht-humidity">{{ humidity }} %</span></p>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
