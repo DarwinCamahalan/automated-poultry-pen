@@ -48,7 +48,7 @@ cbar.set_label('Temperature [$^{\circ}$C]', fontsize=14) # colorbar label
 
 frame = np.zeros((24*32,)) # setup array for storing all 768 temperatures
 t_array = []
-snapshot_count = 0
+snapshot_filename = "image_capture.png"
 print("Starting loop")
 
 
@@ -115,17 +115,25 @@ while True:
         t_array.append(time.monotonic() - t1)
         print('Sample Rate: {0:2.1f}fps'.format(len(t_array) / np.sum(t_array)))
 
-        # Save snapshot image
-        snapshot_count += 1
-        image_filename = f"snapshot_{snapshot_count}.png"
-        fig.savefig(image_filename, dpi=300)
-        print(f"Snapshot saved: {image_filename}")
+        # # Save snapshot image
+        # snapshot_count += 1
+        # image_filename = f"snapshot_{snapshot_count}.png"
+        # fig.savefig(image_filename, dpi=300)
+        # print(f"Snapshot saved: {image_filename}")
         
-        storage.child(image_filename).put(image_filename)
-        print(f"Snapshot sent to Firebase Storage: {image_filename}")
+        # storage.child(image_filename).put(image_filename)
+        # print(f"Snapshot sent to Firebase Storage: {image_filename}")
+        
+        # Save snapshot image
+        fig.savefig(snapshot_filename, dpi=300)
+        print(f"Snapshot saved: {snapshot_filename}")
+
+        # Upload snapshot image to Firebase Storage
+        storage.child(snapshot_filename).put(snapshot_filename)
+        print(f"Snapshot sent to Firebase Storage: {snapshot_filename}")
 
         # Delete the local snapshot image after uploading to Firebase Storage
-        os.remove(image_filename)
+        os.remove(snapshot_filename)
         
     except ValueError:
         continue # if error, just read again
