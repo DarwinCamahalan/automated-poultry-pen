@@ -1,6 +1,7 @@
 
 import Head from 'next/head'
 import Navbar from '../components/Navbar/Navbar.js'
+import Content from '@/components/Content/Content.js'
 const Home = () => {
 
 
@@ -12,6 +13,7 @@ const Home = () => {
       </Head>
       <div >
       <Navbar/>
+      <Content/>
       </div>
     </>
   )
