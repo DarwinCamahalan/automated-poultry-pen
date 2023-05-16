@@ -1,0 +1,7 @@
+config = {
+    "apiKey": "AIzaSyBq68owsBjnpM6KRiFdJm41nd5mSpKBaW0",
+    "authDomain": "poultry-monitoring-system-1.firebaseapp.com",
+    "databaseURL": "https://poultry-monitoring-system-1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "storageBucket": "poultry-monitoring-system-1.appspot.com",
+    "serviceAccount": "./sdk.json"
+}
