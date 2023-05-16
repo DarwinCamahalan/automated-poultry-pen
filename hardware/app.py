@@ -46,7 +46,7 @@ ax = fig.add_subplot(111)
 fig.subplots_adjust(0.05, 0.05, 0.95, 0.95)
 therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=plt.cm.bwr, vmin=25, vmax=45)
 cbar = fig.colorbar(therm1)
-cbar.set_label('Temperature [$^{\circ}$C]', fontsize=14)
+cbar.set_label('Temperature °C', fontsize=14)
 
 fig.canvas.draw()
 ax_background = fig.canvas.copy_from_bbox(ax.bbox)
@@ -54,8 +54,7 @@ fig.show()
 
 frame = np.zeros(mlx_shape[0] * mlx_shape[1])
 t_array = []
-snapshot_filename = "image_capture.png"
-print("Starting loop")
+snapshot_filename = "image_capture.jpg"
 
 while True:
     # Read data from DHT11 sensor
@@ -65,7 +64,7 @@ while True:
     db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
 
     # Print DHT11 sensor values
-    print("\nDHT11 Sensor:")
+    print("\nDHT11:")
     print("Humidity: {}%".format(humidity))
     print("Temperature: {}°C".format(temperature))
 
@@ -82,8 +81,7 @@ while True:
     db.child("camera_sensor").update({"temperature": average_temperature})
 
     # Print MLX90640 temperature
-    print("\nMLX90640 Sensor:")
-    print("Average Temperature: {0:2.1f}°C".format(average_temperature))
+    print("\nMLX90640 Temperature: {0:2.1f}°C".format(average_temperature))
 
     t1 = time.monotonic()
     try:
@@ -97,20 +95,14 @@ while True:
         fig.canvas.blit(ax.bbox)
         fig.canvas.flush_events()
 
-        t_array.append(time.monotonic() - t1)
-        if len(t_array) > 10:
-            t_array = t_array[1:]
-        print('Frame Rate: {0:2.1f}fps'.format(len(t_array) / np.sum(t_array)))
-
         # Save snapshot image
-        fig.savefig(snapshot_filename, dpi=300, facecolor='#FCFCFC', bbox_inches='tight')
+        fig.savefig(snapshot_filename, bbox_inches='tight')
 
         # Upload snapshot image to Firebase Storage
         storage.child(snapshot_filename).put(snapshot_filename)
 
         # Delete the local snapshot image after uploading to Firebase Storage
         os.remove(snapshot_filename)
-
+        print("\nImage sent to Database")
     except ValueError:
         continue  # if error, just read again
-
