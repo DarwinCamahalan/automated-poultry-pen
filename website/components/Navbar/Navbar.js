@@ -10,7 +10,7 @@ const Navbar = () => {
         src={icon}
         alt="Poultry Monitoring System"
         />
-        
+      <h1>Poultry Monitoring System</h1>
       </div>
 
 
