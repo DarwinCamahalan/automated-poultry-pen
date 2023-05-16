@@ -7,50 +7,134 @@
 
   .cameraImage {
     background-color: #161b22;
-    border-radius: 1em;
+    border-radius: 0.8em;
     padding: 1em;
+    border: 1px solid #28313d;
     img {
-      width: 40em;
+      border-radius: 0.3em;
+      width: auto;
       height: 30em;
     }
   }
 
+  .info,
   .sensors {
-    height: 100%;
+    height: 32.5em;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    margin-left: 1em;
-    h1 {
-      font-size: 1.3em;
-      text-align: center;
-      font-weight: 700;
+    justify-content: flex-start;
+    position: relative;
+    p {
+      font-weight: lighter;
       letter-spacing: 1px;
+    }
+    span {
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+    h1 {
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 1.15em;
       margin-bottom: 0.5em;
     }
 
     .dayCount,
+    .fan,
+    .motor,
     .dhtSensor,
     .camSensor,
-    .fan,
-    .motor {
+    .bulb,
+    .averageTemp,
+    .date {
       width: auto;
-      padding: 1em;
-      border-radius: 1em;
       background-color: #161b22;
+      border: 1px solid #28313d;
+      padding: 0.5em 1em;
+      border-radius: 0.8em;
+      margin: 0 1em 1em 1em;
     }
 
+    .date {
+      margin-top: 9em;
+    }
+
+    .dayCount,
     .fan,
-    .motor {
+    .motor,
+    .bulb {
       p {
         text-align: center;
       }
     }
+
     .dayCount {
-      p {
-        text-align: center;
+      position: relative;
+      .dayIcon {
+        position: absolute;
+        top: -15%;
+        left: -15%;
         font-size: 1.5em;
-        font-weight: 700;
+      }
+    }
+
+    .fan {
+      position: relative;
+      .fanIcon {
+        position: absolute;
+        top: -15%;
+        left: -15%;
+        font-size: 1.5em;
+      }
+    }
+
+    .motor {
+      position: relative;
+      .motorIcon {
+        position: absolute;
+        top: -15%;
+        left: -13%;
+        font-size: 1.5em;
+      }
+    }
+
+    .bulb {
+      position: relative;
+      .bulbIcon {
+        position: absolute;
+        top: -15%;
+        left: -13%;
+        font-size: 1.5em;
+      }
+    }
+
+    .averageTemp {
+      position: relative;
+      .avgTempIcon {
+        position: absolute;
+        top: -10%;
+        right: -10%;
+        font-size: 1.5em;
+      }
+    }
+
+    .dhtSensor {
+      position: relative;
+      .dhtIcon {
+        position: absolute;
+        top: -10%;
+        right: -9%;
+        font-size: 1.6em;
+      }
+    }
+
+    .camSensor {
+      position: relative;
+      .camIcon {
+        position: absolute;
+        top: -10%;
+        right: -9%;
+        font-size: 1.7em;
       }
     }
   }
