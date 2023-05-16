@@ -1,0 +1,3 @@
+[submodule "seeed_ircamera"]
+	path = seeed_ircamera
+	url = https://github.com/gobuyun/seeed_ircamera

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "poultry-monitoring-system-1",
+  "private_key_id": "3b30c6e2fc4d9c08ce264bec720c2664f85ae979",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDpJW8PyP9qredG\n5YreKI4UchZimoRLmy+dq3l0OmNql5b5AZAIUyTEB2D6JoO6wKHzRRoR7MWkRIJC\nFDLZqR/BuEUQOeK1YAzHsfmDfl6vP5yVsUOoKiuNMbDtIlFf5CuzEgavu2FCZj/L\nVf7tcUYCZD4nV9aSeNBllXO4ACIbg6cLEN+YFr9YmJVhKH0Bpg4lMjCkQ+f4Tu/m\nFoi33XvY75rz1UMGRubu3zY4hj+gN7pLbsRmEiCWjhyI4L7SEmEbA2JP3yd9vD0t\n9z7aSviuuorwJDc/uqQZNxtJXAuQofjarJ1w0cA2grpGaYbTIOwewOW2jP4EaIIL\n1zrD63ttAgMBAAECggEAFr6lppMTw9sCUIrNMN4g+kKlB2qOlHenvgh/+URG9Zuj\nSViLLhy6XftgTRcby8jGI97ua6g/IcbjNEIXMd/LbtEkv6/9+3bK2GJ29oqJ/yvE\nAWCBOrMee5BI8+FgseunDbmo+FTd6KXj/Fi/3Xcq/sm7vIfXsYNixT4+w0kUCr3u\nCeuBNYzeIE1LS0x94Ea4V0IAq6LjiKK2fkasp+cXNaJ+5NnYCCmrdyKXU+DqP3lF\nwoV6H/CHxtHsv3ZXGYPyRZVijHTbhJoDGHp2WUPPBfP34r7ic8HwHrmRF5Nkca9V\n03iWMLx3f3LWWEBumNFK4XYTVnpMFASnxE2CNYzqIQKBgQD70QtKOeV+9yPs2f5N\n21gU/Yj66IX3TX2ellKK5QKpie8BQj0aT/N9m9N9BqraogMQUg8D5caGn1RFElA3\nMC8BDeC5csJOopZ4F/V7uNz7vqjbzoZestpFqOiox1tqyBFEGCDuWlqu9/OJXuNP\nAbyy/uY87H7St295B8SS+GTm0QKBgQDtBPx4E3QSgd8uwra9bGRUzxPH77E9i1sX\np0mrhFhdUh4Hc4q1xnRCeQWoo59y1Nznzh7hVnyVIHWzIXmBAuzF9B+r2mTH+wTJ\n2edNYcTI39pat47c3na03CYDeCcvub0w2o2zFDJO4+8ToY/p+AkAqCyhcI8eLLsP\nlZHS+fzp3QKBgFR6YtE57xXTD0hMMZYo+bnA/I1AKIE4i+YCBBr4jRYXYgkIEbuc\nCtGezypobDUAmQqGnObv1NQg64JojGSXU42E/Fj6eNksjlInp4EkGW6THc7v0ABA\n/BzWd4b3qmF+UNyJQ7LyuO1t3VO+c39z07ww60iRBlLmmwz9YCL2FdOhAoGBALwn\n6yx/dPOEOeJrHJp/Q563zOI5e6B50lSSrr8EDwn2OHR92q2233AtlrprOhb0uHEk\nhgsolznjTMxpVIWABuqWg9XvR3Yh5Yk//IjHhmpYmoTNlxHrYJzu7xZt+d2/O1tf\nBIIXFGDgPVh+NzrrdmoZF2UJb/PqWo1ilSLA5W/ZAoGAbJFfEgefbeHR6ncoPGtR\nqOgCnPdJzMuXw7HssOl4GJBsDsrNFa0Wa6u/CvUAHZhoa3ouQBy8SsQxjyq1mDIs\nPJsZ+0DS94qi+zzcyrHoVpeWUgPVqEkb8WR48EUL8ttZF59kkVZygcbFdZopP90M\nJjZlcDWAQV9rTKoFQi2kZ5k=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-n08w3@poultry-monitoring-system-1.iam.gserviceaccount.com",
+  "client_id": "100345659533085443890",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-n08w3%40poultry-monitoring-system-1.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
