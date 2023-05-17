@@ -15,16 +15,20 @@ import { RiSensorLine } from "react-icons/ri";
 import { FaTemperatureLow } from "react-icons/fa";
 import { BiCameraHome } from "react-icons/bi";
 import { GoLightBulb } from "react-icons/go";
+import { HiInformationCircle } from "react-icons/hi";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Content = () => {
   const [temperature, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
   const [cameraTemperature, setCameraTemperature] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [motorStatus, setMotorStatus] = useState("");
 
   useEffect(() => {
     const dhtSensorRef = ref(db, "dht_sensor");
     const cameraSensorRef = ref(db, "camera_sensor");
+    const motorStatusRef = ref(db, "motor_status");
 
     onValue(dhtSensorRef, (snapshot) => {
       const { temperature, humidity } = snapshot.val();
@@ -35,6 +39,11 @@ const Content = () => {
     onValue(cameraSensorRef, (snapshot) => {
       const temperature = snapshot.val().temperature;
       setCameraTemperature(Math.round(temperature));
+    });
+
+    onValue(motorStatusRef, (snapshot) => {
+      const motorStatus = snapshot.val().status;
+      setMotorStatus(motorStatus);
     });
 
     // Fetch the image URL from Firebase Storage
@@ -55,14 +64,30 @@ const Content = () => {
     fetchImageUrl();
 
     // Fetch a new image URL every 1 second
-    const interval = setInterval(fetchImageUrl, 1000);
+    const interval = setInterval(fetchImageUrl, 500);
 
     // Clean up the interval when the component is unmounted
     return () => clearInterval(interval);
   }, []);
 
+  const getStyle = () => {
+    if (motorStatus === "OFF") return null;
+    else return styles.green;
+  };
+
   return (
     <div className={styles.contentBG}>
+      {motorStatus !== "OFF" ? (
+        <div className={styles.motorStatus}>
+          <div className={styles.infoContainer}>
+            <h1>
+              <HiInformationCircle className={styles.infoIcon} />
+              Information
+            </h1>
+            <p>Stepper Motor is now {motorStatus}.</p>
+          </div>
+        </div>
+      ) : null}
       <div className={styles.info}>
         <div className={styles.dayCount}>
           <BsCalendar4Week className={styles.dayIcon} />
@@ -81,10 +106,18 @@ const Content = () => {
         </div>
 
         <div className={styles.motor}>
-          <RiSensorLine className={styles.motorIcon} />
+          {motorStatus === "OFF" ? (
+            <RiSensorLine className={styles.motorIcon} />
+          ) : (
+            <AiOutlineLoading3Quarters className={styles.motorONIcon} />
+          )}
+
           <h1>Motor</h1>
           <p>
-            Status: <span>OFF</span>
+            Status:{" "}
+            <span className={getStyle()}>{`${
+              motorStatus == "OFF" ? "OFF" : "ON"
+            }`}</span>
           </p>
         </div>
 

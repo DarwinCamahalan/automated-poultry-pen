@@ -4,7 +4,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
+  .motorStatus {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 3%;
+    .infoContainer {
+      background-color: rgba(0, 128, 0, 0.5);
+      border: 1px solid green;
+      border-radius: 0.8em;
+      h1 {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        letter-spacing: 1px;
+        font-size: 1.2em;
+        background-color: green;
+        border-radius: 0.6em 0.6em 0 0;
+        padding: 0.5em 0;
+        .infoIcon {
+          margin: 0 0.3em 0 0.2em;
+          font-size: 1.3em;
+        }
+      }
+      p {
+        padding: 0.5em 1em;
+        font-size: 1em;
+        color: white;
+      }
+    }
+  }
   .cameraImage {
     background-color: #161b22;
     border-radius: 0.8em;
@@ -90,11 +121,35 @@
 
     .motor {
       position: relative;
+
       .motorIcon {
         position: absolute;
         top: -15%;
         left: -13%;
         font-size: 1.5em;
+      }
+
+      @keyframes rotate360 {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .motorONIcon {
+        position: absolute;
+        top: -15%;
+        left: -13%;
+        font-size: 1.5em;
+        animation: rotate360 2s linear infinite;
+        color: rgb(0, 222, 0);
+        font-weight: bolder;
+      }
+      p {
+        .green {
+          color: rgb(0, 222, 0);
+        }
       }
     }
 
