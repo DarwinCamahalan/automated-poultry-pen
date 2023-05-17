@@ -104,7 +104,7 @@ const Content = () => {
           <FaTemperatureLow className={styles.avgTempIcon} />
           <h1>Average Temp.</h1>
           <p>
-            <span>{temperature + cameraTemperature / 2} °C</span>
+            <span>{(temperature + cameraTemperature) / 2} °C</span>
           </p>
         </div>
         <div className={styles.dhtSensor}>
