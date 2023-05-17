@@ -5,3 +5,11 @@ config = {
     "storageBucket": "poultry-monitoring-system-1.appspot.com",
     "serviceAccount": "./sdk.json"
 }
+
+
+OTHER COMMANDS
+
+CHECK STATUS AUTO START CODE
+
+sudo systemctl stop automated-poultry-pen.service
+sudo systemctl status automated-poultry-pen.service

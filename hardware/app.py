@@ -10,6 +10,8 @@ import cv2
 import os
 from scipy import ndimage
 import threading
+import RPi.GPIO as GPIO
+from time import sleep
 
 # Configure Firebase with your credentials
 config = {
@@ -32,12 +34,24 @@ dht_type = Adafruit_DHT.DHT11
 def read_dht11_sensor():
     while True:
         humidity, temperature = Adafruit_DHT.read_retry(dht_type, dht_pin)
+
         # Update DHT11 sensor values in Firebase
         db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
+
         # Print DHT11 sensor values
         print("\nDHT11:")
         print("Humidity: {}%".format(humidity))
         print("Temperature: {}°C".format(temperature))
+
+        if humidity > 76:
+            db.child("motor_status").update({"status": "ROLLING DOWN"})
+            rotate_forward()
+        elif humidity < 70:
+            db.child("motor_status").update({"status": "ROLLING UP"})
+            rotate_backward()
+        else:
+            db.child("motor_status").update({"status": "OFF"})
+
         time.sleep(1)  # Adjust the delay between readings as needed
 
 # Set up the MLX90640 infrared camera
@@ -105,7 +119,47 @@ def capture_and_upload_image():
             continue  # if error, just read again
         time.sleep(1)  # Adjust the delay between readings as needed
 
-# Create and start the threads for DHT11 sensor, MLX90640 temperature, and image capture
+# Set up GPIO pins for the stepper motor control
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+MotorPin_A = [17, 18, 27, 22]
+
+seq = [[1, 0, 0, 0],
+       [1, 1, 0, 0],
+       [0, 1, 0, 0],
+       [0, 1, 1, 0],
+       [0, 0, 1, 0],
+       [0, 0, 1, 1],
+       [0, 0, 0, 1],
+       [1, 0, 0, 1]]
+
+# Set up motor pins
+for pin in MotorPin_A:
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, 0)
+
+# Create functions for stepper motor control
+def rotate_forward():
+    for i in range(5):
+        for i in range(512):
+            for halfstep in range(8):
+                for pin in range(4):
+                    GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
+                sleep(0.001)
+    sleep(1)
+
+
+def rotate_backward():
+    for i in range(5):
+        for i in range(512):
+            for halfstep in reversed(range(8)):
+                for pin in range(4):
+                    GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
+                sleep(0.001)
+    sleep(1)
+
+# Create and start the threads for DHT11 sensor, MLX90640 temperature, image capture, and stepper motor control
 dht_thread = threading.Thread(target=read_dht11_sensor)
 mlx_temp_thread = threading.Thread(target=read_mlx90640_temperature)
 capture_thread = threading.Thread(target=capture_and_upload_image)
