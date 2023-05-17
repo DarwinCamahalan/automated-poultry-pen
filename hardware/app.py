@@ -43,11 +43,11 @@ def read_dht11_sensor():
         print("Humidity: {}%".format(humidity))
         print("Temperature: {}°C".format(temperature))
 
-        if humidity > 76:
-            db.child("motor_status").update({"status": "ROLLING DOWN"})
+        if humidity > 74:
+            db.child("motor_status").update({"status": "rolling down"})
             rotate_forward()
-        elif humidity < 70:
-            db.child("motor_status").update({"status": "ROLLING UP"})
+        elif humidity < 65:
+            db.child("motor_status").update({"status": "rolling up"})
             rotate_backward()
         else:
             db.child("motor_status").update({"status": "OFF"})
