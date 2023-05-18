@@ -11,7 +11,6 @@ import os
 from scipy import ndimage
 import threading
 import RPi.GPIO as GPIO
-from time import sleep
 import urllib.request
 
 def check_internet():
@@ -55,15 +54,16 @@ def read_dht11_sensor():
 
         if humidity > 73:
             rotate_forward_non_blocking()
-            on_fan_non_blocking()
-            on_bulb_non_blocking()
+            # on_fan()
+            # on_bulb()
+            temp_on()
             
-
         elif humidity < 63:
             rotate_backward_non_blocking()
-            on_fan_non_blocking()
-            on_bulb_non_blocking()
-
+            # on_fan()
+            # on_bulb()
+            temp_on()
+            
         time.sleep(1)  # Adjust the delay between readings as needed
 
 # Set up the MLX90640 infrared camera
@@ -174,12 +174,12 @@ def rotate_forward():
             for halfstep in range(8):
                 for pin in range(4):
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
-                sleep(0.001)
+                time.sleep(0.001)
                 
     if check_internet():
         db.child("motor_status").update({"status": "OFF"})
         
-    sleep(20)
+    time.sleep(100)
     
 def rotate_backward():
     if check_internet():
@@ -190,12 +190,12 @@ def rotate_backward():
             for halfstep in reversed(range(8)):
                 for pin in range(4):
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
-                sleep(0.001)
+                time.sleep(0.001)
                 
     if check_internet():
         db.child("motor_status").update({"status": "OFF"})
         
-    sleep(20)
+    time.sleep(10)
 
     
 # Create a function to rotate the motor forward (non-blocking)
@@ -208,41 +208,51 @@ def rotate_backward_non_blocking():
     rotate_backward_thread = threading.Thread(target=rotate_backward)
     rotate_backward_thread.start()
     
-def on_fan():
-    GPIO.output(relay_pin_1, GPIO.HIGH)
+# def on_fan():
+#     GPIO.output(relay_pin_1, GPIO.HIGH)
     
-    if check_internet():
-        db.child("fan_status").update({"status": "ON"})
+#     if check_internet():
+#         db.child("fan_status").update({"status": "ON"})
     
-    sleep(30)  # Adjust the duration as needed
-    GPIO.output(relay_pin_1, GPIO.LOW)
+#     time.sleep(10)  # Adjust the duration as needed
+#     GPIO.output(relay_pin_1, GPIO.LOW)
 
-    if check_internet():
-        db.child("fan_status").update({"status": "OFF"})
+#     if check_internet():
+#         db.child("fan_status").update({"status": "OFF"})
         
-    sleep(5)
+#     time.sleep(10)
     
-def on_bulb():
+# def on_bulb():
+#     GPIO.output(relay_pin_2, GPIO.HIGH)
+    
+#     if check_internet():
+#         db.child("bulb_status").update({"status": "ON"})
+    
+#     time.sleep(10)  # Adjust the duration as needed
+#     GPIO.output(relay_pin_2, GPIO.LOW)
+    
+#     if check_internet():
+#         db.child("bulb_status").update({"status": "OFF"})
+        
+    time.sleep(10)
+
+def temp_on():
+    GPIO.output(relay_pin_1, GPIO.HIGH)
     GPIO.output(relay_pin_2, GPIO.HIGH)
     
     if check_internet():
+        db.child("fan_status").update({"status": "ON"})
         db.child("bulb_status").update({"status": "ON"})
     
-    sleep(30)  # Adjust the duration as needed
+    time.sleep(10)  # Adjust the duration as needed
+    GPIO.output(relay_pin_1, GPIO.LOW)
     GPIO.output(relay_pin_2, GPIO.LOW)
     
     if check_internet():
+        db.child("fan_status").update({"status": "OFF"})
         db.child("bulb_status").update({"status": "OFF"})
         
-    sleep(5)
-
-def on_fan_non_blocking():
-    fan_thread = threading.Thread(target=on_fan)
-    fan_thread.start()      
-        
-def on_bulb_non_blocking():
-    bulb_thread = threading.Thread(target=on_bulb)
-    bulb_thread.start()
+    time.sleep(10)
 
 # Create and start the threads for DHT11 sensor, MLX90640 temperature, image capture, and stepper motor control
 dht_thread = threading.Thread(target=read_dht11_sensor)
