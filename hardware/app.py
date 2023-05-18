@@ -12,19 +12,28 @@ from scipy import ndimage
 import threading
 import RPi.GPIO as GPIO
 from time import sleep
+import urllib.request
 
-# Configure Firebase with your credentials
-config = {
-    "apiKey": "AIzaSyBq68owsBjnpM6KRiFdJm41nd5mSpKBaW0",
-    "authDomain": "poultry-monitoring-system-1.firebaseapp.com",
-    "databaseURL": "https://poultry-monitoring-system-1-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "storageBucket": "poultry-monitoring-system-1.appspot.com",
-    "serviceAccount": "./sdk.json"
-}
+def check_internet():
+    try:
+        urllib.request.urlopen('http://www.google.com', timeout=1)
+        return True
+    except urllib.request.URLError:
+        return False
 
-firebase = pyrebase.initialize_app(config)
-db = firebase.database()
-storage = firebase.storage()
+if check_internet():
+    # Configure Firebase with your credentials
+    config = {
+        "apiKey": "AIzaSyBq68owsBjnpM6KRiFdJm41nd5mSpKBaW0",
+        "authDomain": "poultry-monitoring-system-1.firebaseapp.com",
+        "databaseURL": "https://poultry-monitoring-system-1-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "storageBucket": "poultry-monitoring-system-1.appspot.com",
+        "serviceAccount": "./sdk.json"
+    }
+
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    storage = firebase.storage()
 
 # Define the GPIO pin connected to the DATA pin of the DHT11 sensor and the sensor type
 dht_pin = 4
@@ -35,8 +44,9 @@ def read_dht11_sensor():
     while True:
         humidity, temperature = Adafruit_DHT.read_retry(dht_type, dht_pin)
 
-        # Update DHT11 sensor values in Firebase
-        db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
+        if check_internet():
+            # Update DHT11 sensor values in Firebase
+            db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
 
         # Print DHT11 sensor values
         print("\nDHT11:")
@@ -45,14 +55,17 @@ def read_dht11_sensor():
 
         if humidity > 74:
             db.child("motor_status").update({"status": "rolling down"})
-            rotate_forward()
-            on_fan()
-            on_bulb()
+            rotate_forward_non_blocking()
+            on_fan_non_blocking()
+            on_bulb_non_blocking()
+            
+
         elif humidity < 65:
             db.child("motor_status").update({"status": "rolling up"})
-            rotate_backward()
-            on_fan()
-            on_bulb()
+            rotate_backward_non_blocking()
+            on_fan_non_blocking()
+            on_bulb_non_blocking()
+            
         else:
             db.child("motor_status").update({"status": "OFF"})
 
@@ -88,8 +101,11 @@ def read_mlx90640_temperature():
         try:
             mlx.getFrame(frame)
             average_temperature = np.mean(frame)
-            # Update MLX90640 temperature in Firebase
-            db.child("camera_sensor").update({"temperature": average_temperature})
+            
+            if check_internet():
+                # Update MLX90640 temperature in Firebase
+                db.child("camera_sensor").update({"temperature": average_temperature})
+                
             # Print MLX90640 temperature
             print("\nMLX90640 Temperature: {0:2.1f}°C".format(average_temperature))
         except ValueError:
@@ -157,8 +173,7 @@ def rotate_forward():
                 for pin in range(4):
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
                 sleep(0.001)
-    sleep(1)
-
+    sleep(5)
 
 def rotate_backward():
     for i in range(5):
@@ -167,17 +182,49 @@ def rotate_backward():
                 for pin in range(4):
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
                 sleep(0.001)
-    sleep(1)
+    sleep(10)
+    
+# Create a function to rotate the motor forward (non-blocking)
+def rotate_forward_non_blocking():
+    rotate_forward_thread = threading.Thread(target=rotate_forward)
+    rotate_forward_thread.start()
+
+# Create a function to rotate the motor backward (non-blocking)
+def rotate_backward_non_blocking():
+    rotate_backward_thread = threading.Thread(target=rotate_backward)
+    rotate_backward_thread.start()
     
 def on_fan():
     GPIO.output(relay_pin_1, GPIO.HIGH)
+    
+    if check_internet():
+        db.child("fan_status").update({"status": "on"})
+    
     sleep(10)  # Adjust the duration as needed
     GPIO.output(relay_pin_1, GPIO.LOW)
 
+    if check_internet():
+        db.child("fan_status").update({"status": "off"})
+    
 def on_bulb():
-    GPIO.output(relay_pin_1, GPIO.HIGH)
+    GPIO.output(relay_pin_2, GPIO.HIGH)
+    
+    if check_internet():
+        db.child("bulb_status").update({"status": "on"})
+    
     sleep(10)  # Adjust the duration as needed
-    GPIO.output(relay_pin_1, GPIO.LOW)
+    GPIO.output(relay_pin_2, GPIO.LOW)
+    
+    if check_internet():
+        db.child("bulb_status").update({"status": "off"})
+
+def on_fan_non_blocking():
+    fan_thread = threading.Thread(target=on_fan)
+    fan_thread.start()      
+        
+def on_bulb_non_blocking():
+    bulb_thread = threading.Thread(target=on_bulb)
+    bulb_thread.start()
 
 # Create and start the threads for DHT11 sensor, MLX90640 temperature, image capture, and stepper motor control
 dht_thread = threading.Thread(target=read_dht11_sensor)
@@ -186,4 +233,10 @@ capture_thread = threading.Thread(target=capture_and_upload_image)
 
 dht_thread.start()
 mlx_temp_thread.start()
-capture_thread.start()
+
+if check_internet():
+    capture_thread.start()
+
+
+
+
