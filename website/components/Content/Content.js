@@ -197,9 +197,6 @@ const Content = () => {
           <BiCameraHome className={styles.camIcon} />
           <h1>MLX90640</h1>
           <p>
-            Population: <span>100 %</span>
-          </p>
-          <p>
             Ambient Temp: <span>{cameraRoomTemp} °C</span>
           </p>
           <p>
