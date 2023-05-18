@@ -16,19 +16,26 @@ import { FaTemperatureLow } from "react-icons/fa";
 import { BiCameraHome } from "react-icons/bi";
 import { GoLightBulb } from "react-icons/go";
 import { HiInformationCircle } from "react-icons/hi";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { ImSpinner9 } from "react-icons/im";
+import { IoBulbSharp } from "react-icons/io5";
+import { GiChicken } from "react-icons/gi";
 
 const Content = () => {
   const [temperature, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
-  const [cameraTemperature, setCameraTemperature] = useState(null);
+  const [cameraBodyTemp, setBodyTemp] = useState(null);
+  const [cameraRoomTemp, setRoomTemp] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [motorStatus, setMotorStatus] = useState("");
+  const [fanStatus, setFanStatus] = useState("");
+  const [bulbStatus, setBulbStatus] = useState("");
 
   useEffect(() => {
     const dhtSensorRef = ref(db, "dht_sensor");
     const cameraSensorRef = ref(db, "camera_sensor");
     const motorStatusRef = ref(db, "motor_status");
+    const fanStatusRef = ref(db, "fan_status");
+    const bulbStatusRef = ref(db, "bulb_status");
 
     onValue(dhtSensorRef, (snapshot) => {
       const { temperature, humidity } = snapshot.val();
@@ -37,13 +44,24 @@ const Content = () => {
     });
 
     onValue(cameraSensorRef, (snapshot) => {
-      const temperature = snapshot.val().temperature;
-      setCameraTemperature(Math.round(temperature));
+      const { bodyTemp, roomTemp } = snapshot.val();
+      setBodyTemp(Math.round(bodyTemp));
+      setRoomTemp(Math.round(roomTemp));
     });
 
     onValue(motorStatusRef, (snapshot) => {
       const motorStatus = snapshot.val().status;
       setMotorStatus(motorStatus);
+    });
+
+    onValue(fanStatusRef, (snapshot) => {
+      const fanStatus = snapshot.val().status;
+      setFanStatus(fanStatus);
+    });
+
+    onValue(bulbStatusRef, (snapshot) => {
+      const bulbStatus = snapshot.val().status;
+      setBulbStatus(bulbStatus);
     });
 
     // Fetch the image URL from Firebase Storage
@@ -70,9 +88,24 @@ const Content = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const getStyle = () => {
+  const getStyle1 = () => {
+    if (fanStatus === "OFF") return null;
+    else return styles.green;
+  };
+
+  const getStyle2 = () => {
     if (motorStatus === "OFF") return null;
     else return styles.green;
+  };
+
+  const getStyle3 = () => {
+    if (bulbStatus === "OFF") return null;
+    else return styles.green;
+  };
+
+  const iconStyle = () => {
+    if (bulbStatus === "OFF") return styles.fanIcon;
+    else return styles.fanON;
   };
 
   return (
@@ -98,10 +131,13 @@ const Content = () => {
         </div>
 
         <div className={styles.fan}>
-          <BsFan className={styles.fanIcon} />
+          <BsFan className={iconStyle()} />
           <h1>Fan</h1>
           <p>
-            Status: <span>OFF</span>
+            Status:{" "}
+            <span className={getStyle1()}>{`${
+              fanStatus === "OFF" ? "OFF" : "ON"
+            }`}</span>
           </p>
         </div>
 
@@ -109,23 +145,30 @@ const Content = () => {
           {motorStatus === "OFF" ? (
             <RiSensorLine className={styles.motorIcon} />
           ) : (
-            <AiOutlineLoading3Quarters className={styles.motorONIcon} />
+            <ImSpinner9 className={styles.motorONIcon} />
           )}
 
           <h1>Motor</h1>
           <p>
             Status:{" "}
-            <span className={getStyle()}>{`${
-              motorStatus == "OFF" ? "OFF" : "ON"
+            <span className={getStyle2()}>{`${
+              motorStatus === "OFF" ? "OFF" : "ON"
             }`}</span>
           </p>
         </div>
 
         <div className={styles.bulb}>
-          <GoLightBulb className={styles.bulbIcon} />
+          {bulbStatus === "OFF" ? (
+            <GoLightBulb className={styles.bulbIcon} />
+          ) : (
+            <IoBulbSharp className={styles.bulbON} />
+          )}
           <h1>Bulb</h1>
           <p>
-            Status: <span>OFF</span>
+            Status:{" "}
+            <span className={getStyle3()}>
+              {`${bulbStatus === "OFF" ? "OFF" : "ON"}`}
+            </span>
           </p>
         </div>
       </div>
@@ -137,7 +180,7 @@ const Content = () => {
           <FaTemperatureLow className={styles.avgTempIcon} />
           <h1>Average Temp.</h1>
           <p>
-            <span>{(temperature + cameraTemperature) / 2} °C</span>
+            <span>{(temperature + cameraRoomTemp) / 2} °C</span>
           </p>
         </div>
         <div className={styles.dhtSensor}>
@@ -154,7 +197,21 @@ const Content = () => {
           <BiCameraHome className={styles.camIcon} />
           <h1>MLX90640</h1>
           <p>
-            Temperature: <span>{cameraTemperature} °C</span>
+            Population: <span>100 %</span>
+          </p>
+          <p>
+            Ambient Temp: <span>{cameraRoomTemp} °C</span>
+          </p>
+          <p>
+            Average Body Temp: <span>{cameraBodyTemp} °C</span>
+          </p>
+        </div>
+
+        <div className={styles.camSensor}>
+          <GiChicken className={styles.populationIcon} />
+          <h1>Chicks Population</h1>
+          <p>
+            <span>{100 - (cameraBodyTemp - cameraRoomTemp) * 0.1} %</span>
           </p>
         </div>
 

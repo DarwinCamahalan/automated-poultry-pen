@@ -4,6 +4,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .green {
+    color: rgb(0, 222, 0);
+  }
+
   .motorStatus {
     position: absolute;
     width: 100%;
@@ -86,10 +91,6 @@
       margin: 0 1em 1em 1em;
     }
 
-    .date {
-      margin-top: 9em;
-    }
-
     .dayCount,
     .fan,
     .motor,
@@ -116,6 +117,24 @@
         top: -15%;
         left: -15%;
         font-size: 1.5em;
+      }
+
+      @keyframes rotate360 {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .fanON {
+        position: absolute;
+        top: -15%;
+        left: -15%;
+        font-size: 1.5em;
+        animation: rotate360 1s linear infinite;
+        color: rgb(255, 42, 42);
       }
     }
 
@@ -146,11 +165,6 @@
         color: rgb(0, 222, 0);
         font-weight: bolder;
       }
-      p {
-        .green {
-          color: rgb(0, 222, 0);
-        }
-      }
     }
 
     .bulb {
@@ -161,6 +175,13 @@
         left: -13%;
         font-size: 1.5em;
       }
+      .bulbON {
+        position: absolute;
+        top: -15%;
+        left: -13%;
+        font-size: 1.5em;
+        color: yellow;
+      }
     }
 
     .averageTemp {
@@ -168,7 +189,7 @@
       .avgTempIcon {
         position: absolute;
         top: -10%;
-        right: -10%;
+        right: -9%;
         font-size: 1.5em;
       }
     }
@@ -178,7 +199,7 @@
       .dhtIcon {
         position: absolute;
         top: -10%;
-        right: -9%;
+        right: -8%;
         font-size: 1.6em;
       }
     }
@@ -188,7 +209,14 @@
       .camIcon {
         position: absolute;
         top: -10%;
-        right: -9%;
+        right: -8%;
+        font-size: 1.7em;
+      }
+
+      .populationIcon {
+        position: absolute;
+        top: -10%;
+        right: -8%;
         font-size: 1.7em;
       }
     }
