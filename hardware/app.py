@@ -53,21 +53,16 @@ def read_dht11_sensor():
         print("Humidity: {}%".format(humidity))
         print("Temperature: {}°C".format(temperature))
 
-        if humidity > 74:
-            db.child("motor_status").update({"status": "rolling down"})
+        if humidity > 73:
             rotate_forward_non_blocking()
             on_fan_non_blocking()
             on_bulb_non_blocking()
             
 
-        elif humidity < 65:
-            db.child("motor_status").update({"status": "rolling up"})
+        elif humidity < 63:
             rotate_backward_non_blocking()
             on_fan_non_blocking()
             on_bulb_non_blocking()
-            
-        else:
-            db.child("motor_status").update({"status": "OFF"})
 
         time.sleep(1)  # Adjust the delay between readings as needed
 
@@ -100,14 +95,18 @@ def read_mlx90640_temperature():
     while True:
         try:
             mlx.getFrame(frame)
-            average_temperature = np.mean(frame)
+            room_temperature = np.mean(frame)
+            body_temperature = frame[16 + 16 * 32] 
             
             if check_internet():
                 # Update MLX90640 temperature in Firebase
-                db.child("camera_sensor").update({"temperature": average_temperature})
+                db.child("camera_sensor").update({"bodyTemp": body_temperature})
+                db.child("camera_sensor").update({"roomTemp": room_temperature})
                 
             # Print MLX90640 temperature
-            print("\nMLX90640 Temperature: {0:2.1f}°C".format(average_temperature))
+            print("\nMLX90640")
+            print("Body Temperature: {0:2.1f}°C".format(body_temperature))
+            print("Average Temperature: {0:2.1f}°C".format(room_temperature))
         except ValueError:
             continue  # if error, just read again
         time.sleep(1)  # Adjust the delay between readings as needed
@@ -167,22 +166,37 @@ for pin in MotorPin_A:
 
 # Create functions for stepper motor control
 def rotate_forward():
+    if check_internet():
+        db.child("motor_status").update({"status": "rolling down"})
+    
     for i in range(5):
         for i in range(512):
             for halfstep in range(8):
                 for pin in range(4):
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
                 sleep(0.001)
-    sleep(5)
-
+                
+    if check_internet():
+        db.child("motor_status").update({"status": "OFF"})
+        
+    sleep(20)
+    
 def rotate_backward():
+    if check_internet():
+        db.child("motor_status").update({"status": "rolling up"})
+    
     for i in range(5):
         for i in range(512):
             for halfstep in reversed(range(8)):
                 for pin in range(4):
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
                 sleep(0.001)
-    sleep(10)
+                
+    if check_internet():
+        db.child("motor_status").update({"status": "OFF"})
+        
+    sleep(20)
+
     
 # Create a function to rotate the motor forward (non-blocking)
 def rotate_forward_non_blocking():
@@ -198,25 +212,29 @@ def on_fan():
     GPIO.output(relay_pin_1, GPIO.HIGH)
     
     if check_internet():
-        db.child("fan_status").update({"status": "on"})
+        db.child("fan_status").update({"status": "ON"})
     
-    sleep(10)  # Adjust the duration as needed
+    sleep(30)  # Adjust the duration as needed
     GPIO.output(relay_pin_1, GPIO.LOW)
 
     if check_internet():
-        db.child("fan_status").update({"status": "off"})
+        db.child("fan_status").update({"status": "OFF"})
+        
+    sleep(5)
     
 def on_bulb():
     GPIO.output(relay_pin_2, GPIO.HIGH)
     
     if check_internet():
-        db.child("bulb_status").update({"status": "on"})
+        db.child("bulb_status").update({"status": "ON"})
     
-    sleep(10)  # Adjust the duration as needed
+    sleep(30)  # Adjust the duration as needed
     GPIO.output(relay_pin_2, GPIO.LOW)
     
     if check_internet():
-        db.child("bulb_status").update({"status": "off"})
+        db.child("bulb_status").update({"status": "OFF"})
+        
+    sleep(5)
 
 def on_fan_non_blocking():
     fan_thread = threading.Thread(target=on_fan)
