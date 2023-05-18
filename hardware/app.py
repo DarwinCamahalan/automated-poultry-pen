@@ -46,9 +46,13 @@ def read_dht11_sensor():
         if humidity > 74:
             db.child("motor_status").update({"status": "rolling down"})
             rotate_forward()
+            on_fan()
+            on_bulb()
         elif humidity < 65:
             db.child("motor_status").update({"status": "rolling up"})
             rotate_backward()
+            on_fan()
+            on_bulb()
         else:
             db.child("motor_status").update({"status": "OFF"})
 
@@ -123,6 +127,12 @@ def capture_and_upload_image():
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
+relay_pin_1 = 23
+relay_pin_2 = 24
+
+GPIO.setup(relay_pin_1, GPIO.OUT)
+GPIO.setup(relay_pin_2, GPIO.OUT)
+
 MotorPin_A = [17, 18, 27, 22]
 
 seq = [[1, 0, 0, 0],
@@ -158,6 +168,16 @@ def rotate_backward():
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
                 sleep(0.001)
     sleep(1)
+    
+def on_fan():
+    GPIO.output(relay_pin_1, GPIO.HIGH)
+    sleep(10)  # Adjust the duration as needed
+    GPIO.output(relay_pin_1, GPIO.LOW)
+
+def on_bulb():
+    GPIO.output(relay_pin_1, GPIO.HIGH)
+    sleep(10)  # Adjust the duration as needed
+    GPIO.output(relay_pin_1, GPIO.LOW)
 
 # Create and start the threads for DHT11 sensor, MLX90640 temperature, image capture, and stepper motor control
 dht_thread = threading.Thread(target=read_dht11_sensor)
