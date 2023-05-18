@@ -208,7 +208,9 @@ const Content = () => {
           <GiChicken className={styles.populationIcon} />
           <h1>Chicks Population</h1>
           <p>
-            <span>{100 - (cameraBodyTemp - cameraRoomTemp) * 0.1} %</span>
+            <span>
+              {100 - (100 - (cameraBodyTemp - cameraRoomTemp)) * 0.1} %
+            </span>
           </p>
         </div>
 
