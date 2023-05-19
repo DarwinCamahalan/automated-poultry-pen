@@ -26,6 +26,8 @@ const Content = () => {
   const [cameraBodyTemp, setBodyTemp] = useState(null);
   const [cameraRoomTemp, setRoomTemp] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [daysCount, setDaysCount] = useState(null);
+  const [startDate, setStartDate] = useState(null);
   const [motorStatus, setMotorStatus] = useState("");
   const [fanStatus, setFanStatus] = useState("");
   const [bulbStatus, setBulbStatus] = useState("");
@@ -36,6 +38,7 @@ const Content = () => {
     const motorStatusRef = ref(db, "motor_status");
     const fanStatusRef = ref(db, "fan_status");
     const bulbStatusRef = ref(db, "bulb_status");
+    const dayTackerRef = ref(db, "day_tracker");
 
     onValue(dhtSensorRef, (snapshot) => {
       const { temperature, humidity } = snapshot.val();
@@ -62,6 +65,18 @@ const Content = () => {
     onValue(bulbStatusRef, (snapshot) => {
       const bulbStatus = snapshot.val().status;
       setBulbStatus(bulbStatus);
+    });
+
+    onValue(dayTackerRef, (snapshot) => {
+      const { daysLeft, startDate } = snapshot.val();
+      setDaysCount(daysLeft);
+
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      const formattedStartDate = new Date(startDate).toLocaleDateString(
+        undefined,
+        options
+      );
+      setStartDate(formattedStartDate);
     });
 
     // Fetch the image URL from Firebase Storage
@@ -126,7 +141,7 @@ const Content = () => {
           <BsCalendar4Week className={styles.dayIcon} />
           <h1>Day</h1>
           <p>
-            <span>1</span>
+            <span>{daysCount}</span>
           </p>
         </div>
 
@@ -216,7 +231,7 @@ const Content = () => {
 
         <div className={styles.date}>
           <h1>Start Date</h1>
-          <p>5/16/2023</p>
+          <p>{startDate}</p>
         </div>
       </div>
     </div>
