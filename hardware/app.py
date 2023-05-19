@@ -1,4 +1,5 @@
 import time
+import datetime
 import board
 import busio
 import numpy as np
@@ -8,10 +9,27 @@ import Adafruit_DHT
 import matplotlib.pyplot as plt
 import cv2
 import os
+import json
 from scipy import ndimage
 import threading
 import RPi.GPIO as GPIO
 import urllib.request
+from board import SCL, SDA
+from oled_text import OledText
+
+i2c = busio.I2C(SCL, SDA)
+oled = OledText(i2c, 128, 64)
+
+# declaring variables
+bulb_status="OFF"
+fan_status="OFF"
+motor_status = "OFF"
+rolling_direction=""
+days_left=0
+humidity=0
+temperature=0
+body_temperature=0
+room_temperature=0
 
 def check_internet():
     try:
@@ -40,28 +58,22 @@ dht_type = Adafruit_DHT.DHT11
 
 # Create a function to read the temperature and humidity from the DHT11 sensor
 def read_dht11_sensor():
+    global humidity, temperature
+    
     while True:
         humidity, temperature = Adafruit_DHT.read_retry(dht_type, dht_pin)
 
         if check_internet():
             # Update DHT11 sensor values in Firebase
             db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
+            
 
-        # Print DHT11 sensor values
-        print("\nDHT11:")
-        print("Humidity: {}%".format(humidity))
-        print("Temperature: {}°C".format(temperature))
-
-        if humidity > 73:
+        if temperature > 34:
             rotate_forward_non_blocking()
-            # on_fan()
-            # on_bulb()
             temp_on()
             
-        elif humidity < 63:
+        elif temperature < 30:
             rotate_backward_non_blocking()
-            # on_fan()
-            # on_bulb()
             temp_on()
             
         time.sleep(1)  # Adjust the delay between readings as needed
@@ -92,6 +104,7 @@ snapshot_filename = "image_capture.jpg"
 
 # Create a function to read the temperature from the MLX90640 infrared camera
 def read_mlx90640_temperature():
+    global room_temperature, body_temperature
     while True:
         try:
             mlx.getFrame(frame)
@@ -103,10 +116,6 @@ def read_mlx90640_temperature():
                 db.child("camera_sensor").update({"bodyTemp": body_temperature})
                 db.child("camera_sensor").update({"roomTemp": room_temperature})
                 
-            # Print MLX90640 temperature
-            print("\nMLX90640")
-            print("Body Temperature: {0:2.1f}°C".format(body_temperature))
-            print("Average Temperature: {0:2.1f}°C".format(room_temperature))
         except ValueError:
             continue  # if error, just read again
         time.sleep(1)  # Adjust the delay between readings as needed
@@ -138,6 +147,47 @@ def capture_and_upload_image():
             continue  # if error, just read again
         time.sleep(1)  # Adjust the delay between readings as needed
 
+def calculate_remaining_days():
+    start_date = datetime.date(2023, 5, 16)
+    current_date = datetime.date.today()
+    remaining_days = (start_date - current_date).days
+
+    # Store the remaining days and starting date in variables
+    global days_left, starting_date
+    days_left = remaining_days
+    if days_left < 0:
+        days_left = abs(days_left)
+        
+    starting_date = start_date.strftime("%Y-%m-%d")
+
+    # Update the JSON file
+    data = {
+        "days_left": days_left,
+        "starting_date": starting_date
+    }
+    with open("date.json", "w") as file:
+        json.dump(data, file)
+        
+    # Schedule the next update after 24 hours
+    threading.Timer(24 * 60 * 60, calculate_remaining_days).start()
+
+def update_firebase():
+    with open("date.json", "r") as file:
+        data = json.load(file)
+
+    days_left = data.get("days_left", 0)
+    starting_date = data.get("starting_date", "")
+
+    # Make sure days_left is positive
+    if days_left < 0:
+        days_left = abs(days_left)
+
+    db.child("day_tracker").update({"daysLeft": days_left})
+    db.child("day_tracker").update({"startDate": starting_date})
+
+    # Schedule the next update after 24 hours
+    threading.Timer(24 * 60 * 60, update_firebase).start()
+
 # Set up GPIO pins for the stepper motor control
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
@@ -164,8 +214,23 @@ for pin in MotorPin_A:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, 0)
 
+# Create a function to rotate the motor forward (non-blocking)
+def rotate_forward_non_blocking():
+    rotate_forward_thread = threading.Thread(target=rotate_forward)
+    rotate_forward_thread.start()
+
+
+# Create a function to rotate the motor backward (non-blocking)
+def rotate_backward_non_blocking():
+    rotate_backward_thread = threading.Thread(target=rotate_backward)
+    rotate_backward_thread.start()
+
 # Create functions for stepper motor control
 def rotate_forward():
+    global motor_status, rolling_direction
+    motor_status="ON"
+    rolling_direction="Rolling Forward."
+    
     if check_internet():
         db.child("motor_status").update({"status": "rolling down"})
     
@@ -175,13 +240,23 @@ def rotate_forward():
                 for pin in range(4):
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
                 time.sleep(0.001)
-                
+    
+    motor_status="OFF"
+    rolling_direction=""
+
     if check_internet():
         db.child("motor_status").update({"status": "OFF"})
-        
-    time.sleep(100)
+       
+    if temperature > 34:
+        # Delay for 60 seconds if humidity is still high
+        time.sleep(60)
+
     
 def rotate_backward():
+    global motor_status, rolling_direction
+    motor_status = "ON"
+    rolling_direction = "Rolling Backward."
+
     if check_internet():
         db.child("motor_status").update({"status": "rolling up"})
     
@@ -191,79 +266,121 @@ def rotate_backward():
                 for pin in range(4):
                     GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
                 time.sleep(0.001)
-                
+    
+    motor_status = "OFF"
+    rolling_direction = ""
+    
     if check_internet():
         db.child("motor_status").update({"status": "OFF"})
-        
-    time.sleep(10)
+    
+    if temperature < 30:
+        # Delay for 60 seconds if humidity is still low
+        time.sleep(60)
 
-    
-# Create a function to rotate the motor forward (non-blocking)
-def rotate_forward_non_blocking():
-    rotate_forward_thread = threading.Thread(target=rotate_forward)
-    rotate_forward_thread.start()
-
-# Create a function to rotate the motor backward (non-blocking)
-def rotate_backward_non_blocking():
-    rotate_backward_thread = threading.Thread(target=rotate_backward)
-    rotate_backward_thread.start()
-    
-# def on_fan():
-#     GPIO.output(relay_pin_1, GPIO.HIGH)
-    
-#     if check_internet():
-#         db.child("fan_status").update({"status": "ON"})
-    
-#     time.sleep(10)  # Adjust the duration as needed
-#     GPIO.output(relay_pin_1, GPIO.LOW)
-
-#     if check_internet():
-#         db.child("fan_status").update({"status": "OFF"})
-        
-#     time.sleep(10)
-    
-# def on_bulb():
-#     GPIO.output(relay_pin_2, GPIO.HIGH)
-    
-#     if check_internet():
-#         db.child("bulb_status").update({"status": "ON"})
-    
-#     time.sleep(10)  # Adjust the duration as needed
-#     GPIO.output(relay_pin_2, GPIO.LOW)
-    
-#     if check_internet():
-#         db.child("bulb_status").update({"status": "OFF"})
-        
-    time.sleep(10)
 
 def temp_on():
+    global bulb_status, fan_status
     GPIO.output(relay_pin_1, GPIO.HIGH)
     GPIO.output(relay_pin_2, GPIO.HIGH)
+    
+    fan_status = "ON"
+    bulb_status = "ON"
     
     if check_internet():
         db.child("fan_status").update({"status": "ON"})
         db.child("bulb_status").update({"status": "ON"})
     
-    time.sleep(10)  # Adjust the duration as needed
+    # Delay for 60 seconds
+    threading.Timer(60, turn_off).start()
+
+def turn_off():
+    global bulb_status, fan_status
     GPIO.output(relay_pin_1, GPIO.LOW)
     GPIO.output(relay_pin_2, GPIO.LOW)
+
+    fan_status = "OFF"
+    bulb_status = "OFF"
     
     if check_internet():
         db.child("fan_status").update({"status": "OFF"})
         db.child("bulb_status").update({"status": "OFF"})
+
+    if temperature > 34:
+        # Delay for another 60 seconds if humidity is still high
+        time.sleep(60)
+
+# Start the temperature control
+temp_on()
         
-    time.sleep(10)
+    
+def oled_screen_display():
+    while True:
+        oled.clear()
+        oled.text("   DHT11 Sensor", 1)
+        oled.text("Humidity: {}%".format(humidity), 3)
+        oled.text("Temp.: {}°C".format(temperature), 4)
+        oled.show()
+
+        time.sleep(3)
+
+        oled.clear()
+        oled.text("  MLX90640 Sensor", 1)
+        oled.text("Room Temp: {}°C".format(int(room_temperature)), 3)
+        oled.text("Body Temp: {}°C".format(int(body_temperature)), 4)
+        oled.show()
+
+        time.sleep(3)
+
+        oled.clear()
+        oled.text("   Stepper Motor", 1)
+        oled.text("Status: {}".format(motor_status), 3)
+        oled.text("{}".format(rolling_direction), 4)
+        oled.show()
+
+        time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
+
+        oled.clear()
+        oled.text("    Exhaust Fan", 1)
+        oled.text("Status: {}".format(fan_status), 3)
+        oled.text("", 4)
+        oled.show()
+
+        time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
+
+        oled.clear()
+        oled.text("    Light Bulb", 1)
+        oled.text("Status: {}".format(bulb_status), 3)
+        oled.text("", 4)
+        oled.show()
+
+        time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
+
+        oled.clear()
+        oled.text("        Day", 1)
+        oled.text("         {}".format(days_left), 3)
+        oled.text("", 4)
+        oled.show()
+        
+        time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
+
+
 
 # Create and start the threads for DHT11 sensor, MLX90640 temperature, image capture, and stepper motor control
+oled_screen_thread = threading.Thread(target=oled_screen_display)
 dht_thread = threading.Thread(target=read_dht11_sensor)
 mlx_temp_thread = threading.Thread(target=read_mlx90640_temperature)
 capture_thread = threading.Thread(target=capture_and_upload_image)
+calculate_days_thread = threading.Thread(target=calculate_remaining_days)
+update_firebase_thread = threading.Thread(target=update_firebase)
 
 dht_thread.start()
 mlx_temp_thread.start()
+calculate_days_thread.start()
+oled_screen_thread.start()
 
 if check_internet():
     capture_thread.start()
+    update_firebase_thread.start()
 
 
 
