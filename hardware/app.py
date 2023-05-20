@@ -25,6 +25,9 @@ bulb_status="OFF"
 fan_status="OFF"
 motor_status = "OFF"
 rolling_direction=""
+forward_ON = False
+backward_ON = False
+fan_bulb_ON = False
 days_left=0
 humidity=0
 temperature=0
@@ -62,20 +65,28 @@ def read_dht11_sensor():
     
     while True:
         humidity, temperature = Adafruit_DHT.read_retry(dht_type, dht_pin)
-
-        if check_internet():
-            # Update DHT11 sensor values in Firebase
-            db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
-            
-
-        if temperature > 34:
-            rotate_forward_non_blocking()
-            temp_on()
-            
-        elif temperature < 30:
-            rotate_backward_non_blocking()
-            temp_on()
-            
+        try:
+            if check_internet():
+                # Update DHT11 sensor values in Firebase
+                db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
+                
+            if humidity > 78:
+            #if temperature > 34:
+                if(forward_ON == False):
+                    rotate_forward_non_blocking()
+                if(fan_bulb_ON == False):
+                    temp_on_non_blocking() 
+                
+                
+            elif humidity < 65:
+            #elif temperature < 30:
+                if(backward_ON == False):
+                    rotate_backward_non_blocking()
+                if(fan_bulb_ON == False):
+                    temp_on_non_blocking()
+        except ValueError:
+            continue  # if error, just read again
+        
         time.sleep(1)  # Adjust the delay between readings as needed
 
 # Set up the MLX90640 infrared camera
@@ -182,8 +193,9 @@ def update_firebase():
     if days_left < 0:
         days_left = abs(days_left)
 
-    db.child("day_tracker").update({"daysLeft": days_left})
-    db.child("day_tracker").update({"startDate": starting_date})
+    if check_internet():
+        db.child("day_tracker").update({"daysLeft": days_left})
+        db.child("day_tracker").update({"startDate": starting_date})
 
     # Schedule the next update after 24 hours
     threading.Timer(24 * 60 * 60, update_firebase).start()
@@ -227,7 +239,9 @@ def rotate_backward_non_blocking():
 
 # Create functions for stepper motor control
 def rotate_forward():
-    global motor_status, rolling_direction
+    global motor_status, rolling_direction, forward_ON
+    forward_ON = True
+
     motor_status="ON"
     rolling_direction="Rolling Forward."
     
@@ -246,14 +260,18 @@ def rotate_forward():
 
     if check_internet():
         db.child("motor_status").update({"status": "OFF"})
-       
-    if temperature > 34:
-        # Delay for 60 seconds if humidity is still high
+
+    if humidity > 78:
         time.sleep(60)
+        forward_ON = False
+    else:
+        forward_ON = False
 
     
 def rotate_backward():
-    global motor_status, rolling_direction
+    global motor_status, rolling_direction, backward_ON
+    backward_ON = True
+
     motor_status = "ON"
     rolling_direction = "Rolling Backward."
 
@@ -273,13 +291,21 @@ def rotate_backward():
     if check_internet():
         db.child("motor_status").update({"status": "OFF"})
     
-    if temperature < 30:
-        # Delay for 60 seconds if humidity is still low
+    if humidity > 65:
         time.sleep(60)
+        backward_ON = False
+    else:
+        backward_ON = False
 
+
+def temp_on_non_blocking():
+    temp_on_thread = threading.Thread(target=temp_on)
+    temp_on_thread.start()
 
 def temp_on():
-    global bulb_status, fan_status
+    global bulb_status, fan_status, fan_bulb_ON
+    fan_bulb_ON = True
+
     GPIO.output(relay_pin_1, GPIO.HIGH)
     GPIO.output(relay_pin_2, GPIO.HIGH)
     
@@ -290,11 +316,8 @@ def temp_on():
         db.child("fan_status").update({"status": "ON"})
         db.child("bulb_status").update({"status": "ON"})
     
-    # Delay for 60 seconds
-    threading.Timer(60, turn_off).start()
-
-def turn_off():
-    global bulb_status, fan_status
+    time.sleep(60)
+    
     GPIO.output(relay_pin_1, GPIO.LOW)
     GPIO.output(relay_pin_2, GPIO.LOW)
 
@@ -305,12 +328,12 @@ def turn_off():
         db.child("fan_status").update({"status": "OFF"})
         db.child("bulb_status").update({"status": "OFF"})
 
-    if temperature > 34:
-        # Delay for another 60 seconds if humidity is still high
+    if humidity > 78:
         time.sleep(60)
+        fan_bulb_ON = False
+    else:
+        fan_bulb_ON = False
 
-# Start the temperature control
-temp_on()
         
     
 def oled_screen_display():
@@ -377,6 +400,7 @@ dht_thread.start()
 mlx_temp_thread.start()
 calculate_days_thread.start()
 oled_screen_thread.start()
+
 
 if check_internet():
     capture_thread.start()
