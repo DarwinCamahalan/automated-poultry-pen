@@ -9,7 +9,13 @@ config = {
 
 OTHER COMMANDS
 
-CHECK STATUS AUTO START CODE
+ENALBLE SCRIPT RUNNING
 
-sudo systemctl stop automated-poultry-pen.service
-sudo systemctl status automated-poultry-pen.service
+sudo systemctl enable app
+sudo systemctl start app
+
+
+STOP SCRIPT RUNNING
+
+sudo systemctl stop app
+sudo systemctl status app

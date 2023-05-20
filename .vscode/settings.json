@@ -3,5 +3,9 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "notebook.formatOnSave.enabled": true,
-  "eslint.format.enable": true
+  "eslint.format.enable": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  "python.formatting.provider": "none"
 }

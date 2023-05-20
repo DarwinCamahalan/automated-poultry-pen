@@ -70,16 +70,16 @@ def read_dht11_sensor():
                 # Update DHT11 sensor values in Firebase
                 db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
                 
-            if humidity > 78:
-            #if temperature > 34:
+            # if humidity > 78:
+            if temperature > 36:
                 if(forward_ON == False):
                     rotate_forward_non_blocking()
                 if(fan_bulb_ON == False):
                     temp_on_non_blocking() 
                 
                 
-            elif humidity < 65:
-            #elif temperature < 30:
+            # elif humidity < 65:
+            elif temperature < 32:
                 if(backward_ON == False):
                     rotate_backward_non_blocking()
                 if(fan_bulb_ON == False):
@@ -261,7 +261,7 @@ def rotate_forward():
     if check_internet():
         db.child("motor_status").update({"status": "OFF"})
 
-    if humidity > 78:
+    if temperature > 36:
         time.sleep(60)
         forward_ON = False
     else:
@@ -291,7 +291,7 @@ def rotate_backward():
     if check_internet():
         db.child("motor_status").update({"status": "OFF"})
     
-    if humidity > 65:
+    if temperature < 32:
         time.sleep(60)
         backward_ON = False
     else:
@@ -328,7 +328,7 @@ def temp_on():
         db.child("fan_status").update({"status": "OFF"})
         db.child("bulb_status").update({"status": "OFF"})
 
-    if humidity > 78:
+    if temperature > 36:
         time.sleep(60)
         fan_bulb_ON = False
     else:
