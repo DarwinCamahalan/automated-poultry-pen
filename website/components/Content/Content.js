@@ -119,7 +119,7 @@ const Content = () => {
   };
 
   const iconStyle = () => {
-    if (bulbStatus === "OFF") return styles.fanIcon;
+    if (fanStatus === "OFF") return styles.fanIcon;
     else return styles.fanON;
   };
 
