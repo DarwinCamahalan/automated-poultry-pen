@@ -21,6 +21,7 @@ i2c = busio.I2C(SCL, SDA)
 oled = OledText(i2c, 128, 64)
 
 # declaring variables
+online = "Offline"
 bulb_status="OFF"
 fan_status="OFF"
 motor_status = "OFF"
@@ -30,6 +31,8 @@ humidity=0
 temperature=0
 body_temperature=0
 room_temperature=0
+max_temp_depending_on_day = 0
+minx_temp_depending_on_day = 0
 
 # Constants for time ranges
 MORNING_START_TIME = datetime.time(7, 0)
@@ -38,10 +41,13 @@ EVENING_START_TIME = datetime.time(19, 0)
 EVENING_END_TIME = datetime.time(6, 59)
 
 def check_internet():
+    global online
     try:
         urllib.request.urlopen('http://www.google.com', timeout=1)
+        online = "Online"
         return True
     except urllib.request.URLError:
+        online = "Offline"
         return False
 
 if check_internet():
@@ -67,12 +73,14 @@ def read_dht11_sensor():
     global humidity, temperature
     
     while True:
-        humidity, temperature = Adafruit_DHT.read_retry(dht_type, dht_pin)
-
-        if check_internet():
-            # Update DHT11 sensor values in Firebase
-            db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
-        
+        try:
+            humidity, temperature = Adafruit_DHT.read_retry(dht_type, dht_pin)
+            if check_internet():
+                # Update DHT11 sensor values in Firebase
+                db.child("dht_sensor").update({"humidity": humidity, "temperature": temperature})
+        except Exception as e:
+            print(f"DHT11: {str(e)}")               
+            continue
         time.sleep(1)  # Adjust the delay between readings as needed
 
 # Set up the MLX90640 infrared camera
@@ -87,7 +95,19 @@ mlx_interp_shape = (mlx_shape[0] * mlx_interp_val, mlx_shape[1] * mlx_interp_val
 fig = plt.figure(figsize=(12, 9))
 ax = fig.add_subplot(111)
 fig.subplots_adjust(0.05, 0.05, 0.95, 0.95)
-therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=plt.cm.bwr, vmin=25, vmax=45)
+
+color_map = plt.cm.seismic
+
+if check_internet():
+    color_map = db.child('image_color/color').get().val()
+    if(color_map == 1):
+        color_map = plt.cm.gist_gray
+    elif(color_map == 2):
+        color_map = plt.cm.hot
+    
+
+therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=25, vmax=45)
+
 cbar = fig.colorbar(therm1)
 cbar.set_label('Temperature °C', fontsize=14)
 
@@ -146,6 +166,8 @@ def capture_and_upload_image():
         time.sleep(1)  # Adjust the delay between readings as needed
 
 def calculate_remaining_days():
+    global max_temp_depending_on_day, min_temp_depending_on_day
+    
     start_date = datetime.date(2023, 5, 16)
     current_date = datetime.date.today()
     remaining_days = (start_date - current_date).days
@@ -165,6 +187,25 @@ def calculate_remaining_days():
     }
     with open("date.json", "w") as file:
         json.dump(data, file)
+        
+    # DAY 1-3 - temperature > 34 
+    # DAY 4-7 - temperature > 34 
+    # DAY 8-14 - temperature > 31   
+    
+    # DAY 1-3 - temperature < 33 
+    # DAY 4-7 - temperature < 32 
+    # DAY 8-14 - temperature < 29 
+    
+    if(days_left == 1 or days_left == 2 or days_left == 3):
+        max_temp_depending_on_day = 34
+        min_temp_depending_on_day = 33
+    elif(days_left == 4 or days_left == 5 or days_left == 6 or days_left == 7):
+        max_temp_depending_on_day = 34
+        min_temp_depending_on_day = 32
+    elif(days_left > 7 ):
+        max_temp_depending_on_day = 31
+        min_temp_depending_on_day = 29 
+          
         
     # Schedule the next update after 24 hours
     threading.Timer(24 * 60 * 60, calculate_remaining_days).start()
@@ -231,15 +272,16 @@ def rotate_forward():
         # DAY 4-7 - temperature > 34 
         # DAY 8-14 - temperature > 31 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
-            if (humidity > 65):
-                
+            if (humidity > 60):
+            # if (temperature < min_temp_depending_on_day):    
                 motor_status="ON"
                 rolling_direction="Rolling Forward."
                 
                 if check_internet():
                     db.child("motor_status").update({"status": "rolling down"})
+                    db.child("fan_status").update({"status": "OFF"})
                 
-                for i in range(5):
+                for i in range(10):
                     for i in range(512):
                         for halfstep in range(8):
                             for pin in range(4):
@@ -253,15 +295,13 @@ def rotate_forward():
                 if check_internet():
                     db.child("motor_status").update({"status": "OFF"})
                 
-                while (humidity > 65):
+                while (humidity > 60):
                     
                     # DAY 1-3 - temperature > 34 
                     # DAY 4-7 - temperature > 34 
                     # DAY 8-14 - temperature > 31 
-                    if(humidity < 65):
+                    if(humidity < 60):
                         continue
-                    # Delay before running the thread again
-                    time.sleep(5)
 
     
 def rotate_backward():
@@ -272,15 +312,16 @@ def rotate_backward():
         # DAY 4-7 - temperature > 34 
         # DAY 8-14 - temperature > 31 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
-            if (humidity < 65):
-                
+            if (humidity < 60):
+            # if (temperature < min_temp_depending_on_day): 
                 motor_status = "ON"
                 rolling_direction = "Rolling Backward."
 
                 if check_internet():
                     db.child("motor_status").update({"status": "rolling up"})
+                    db.child("fan_status").update({"status": "OFF"})
                 
-                for i in range(5):
+                for i in range(10):
                     for i in range(512):
                         for halfstep in reversed(range(8)):
                             for pin in range(4):
@@ -294,14 +335,12 @@ def rotate_backward():
                 if check_internet():
                     db.child("motor_status").update({"status": "OFF"})
                     
-                while (humidity < 65):
+                while (humidity < 60):
                     # DAY 1-3 - temperature > 34 
                     # DAY 4-7 - temperature > 34 
                     # DAY 8-14 - temperature > 31 
-                    if(humidity > 65):
+                    if(humidity > 60):
                         continue
-                    # Delay before running the thread again
-                    time.sleep(5)
         
 def fan_on():
     global  fan_status
@@ -314,27 +353,27 @@ def fan_on():
         # DAY 4-7 - temperature > 34 
         # DAY 8-14 - temperature > 31 
         if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
-            if(humidity > 65):
-                GPIO.output(relay_pin_2, GPIO.HIGH)
+            if(humidity > 60):
+            # if (temperature > max_temp_depending_on_day):
+                GPIO.output(relay_pin_1, GPIO.HIGH)
                 fan_status = "ON"
 
                 if check_internet():
                     db.child("fan_status").update({"status": "ON"})
+                    db.child("motor_status").update({"status": "OFF"})
                 
                 time.sleep(60)
                 
-                GPIO.output(relay_pin_2, GPIO.LOW)
+                GPIO.output(relay_pin_1, GPIO.LOW)
 
                 fan_status = "OFF"
 
                 if check_internet():
                     db.child("fan_status").update({"status": "OFF"})
                     
-                while(humidity > 65):
-                    if(humidity < 65):
+                while(humidity > 60):
+                    if(humidity < 60):
                         continue
-                    # Delay before running the thread again
-                    time.sleep(5)
     
 def bulb_on():
     global bulb_status
@@ -344,8 +383,9 @@ def bulb_on():
     # DAY 8-14 - temperature < 29 
     
     while True:
-        if humidity < 65:
-            GPIO.output(relay_pin_1, GPIO.HIGH)
+        if humidity < 60:
+        # if (temperature < min_temp_depending_on_day):
+            GPIO.output(relay_pin_2, GPIO.HIGH)
             bulb_status = "ON"    
         
             if check_internet():
@@ -353,17 +393,15 @@ def bulb_on():
         
             time.sleep(60)
         
-            GPIO.output(relay_pin_1, GPIO.LOW)
+            GPIO.output(relay_pin_2, GPIO.LOW)
             bulb_status = "OFF"
         
             if check_internet():
                 db.child("bulb_status").update({"status": "OFF"})
         
-        while humidity < 65:
-            if humidity > 65:
+        while humidity < 60:
+            if humidity > 60:
                 continue  # Continue to the next iteration of the inner while loop
-            # Delay before running the thread again
-            time.sleep(5)
  
 def oled_screen_display():
     while True:
@@ -394,7 +432,7 @@ def oled_screen_display():
         oled.clear()
         oled.text("    Exhaust Fan", 1)
         oled.text("Status: {}".format(fan_status), 3)
-        oled.text("", 4)
+        oled.text("", 4)        
         oled.show()
 
         time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
@@ -402,7 +440,7 @@ def oled_screen_display():
         oled.clear()
         oled.text("    Light Bulb", 1)
         oled.text("Status: {}".format(bulb_status), 3)
-        oled.text("", 4)
+        oled.text("", 4)        
         oled.show()
 
         time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
@@ -410,13 +448,23 @@ def oled_screen_display():
         oled.clear()
         oled.text("        Day", 1)
         oled.text("         {}".format(days_left), 3)
-        oled.text("", 4)
+        oled.text("", 4)        
         oled.show()
+        
+        time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
         
         current_time = datetime.datetime.now().strftime("%I:%M %p")  # Get the current time in the format HH:MM AM/PM
         oled.text("   Current Time", 1)  # Display the current time
         oled.text("     {}".format(current_time), 3)  # Display the current time
-        oled.text("", 4)  # Display the current time
+        oled.text("", 4)        
+        oled.show()
+        
+        time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
+        
+        oled.clear()
+        oled.text("  Internet Status", 1)
+        oled.text("      {}".format(online), 3)
+        oled.text("", 4)        
         oled.show()
         
         time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
@@ -424,6 +472,7 @@ def oled_screen_display():
 
 
 # Create and start the threads for DHT11 sensor, MLX90640 temperature, image capture, and stepper motor control
+check_internet_thread = threading.Thread(target=check_internet)
 oled_screen_thread = threading.Thread(target=oled_screen_display)
 dht_thread = threading.Thread(target=read_dht11_sensor)
 mlx_temp_thread = threading.Thread(target=read_mlx90640_temperature)
@@ -433,6 +482,7 @@ update_firebase_thread = threading.Thread(target=update_firebase)
 bulb_thread = threading.Thread(target=bulb_on)
 
 
+check_internet_thread.start()
 dht_thread.start()
 mlx_temp_thread.start()
 calculate_days_thread.start()
