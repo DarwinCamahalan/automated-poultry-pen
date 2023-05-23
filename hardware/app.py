@@ -83,46 +83,52 @@ def read_dht11_sensor():
             continue
         time.sleep(1)  # Adjust the delay between readings as needed
 
-# Set up the MLX90640 infrared camera
-i2c = busio.I2C(board.SCL, board.SDA, frequency=400000)
-mlx = adafruit_mlx90640.MLX90640(i2c)
-mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_2_HZ
-mlx_shape = (24, 32)
-
-mlx_interp_val = 10
-mlx_interp_shape = (mlx_shape[0] * mlx_interp_val, mlx_shape[1] * mlx_interp_val)
-
-fig = plt.figure(figsize=(12, 9))
-ax = fig.add_subplot(111)
-fig.subplots_adjust(0.05, 0.05, 0.95, 0.95)
-
-color_map = plt.cm.seismic
-
-if check_internet():
-    color_map = db.child('image_color/color').get().val()
-    if(color_map == 1):
-        color_map = plt.cm.gist_gray
-    elif(color_map == 2):
-        color_map = plt.cm.hot
-    
-
-therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=25, vmax=45)
-
-cbar = fig.colorbar(therm1)
-cbar.set_label('Temperature °C', fontsize=14)
-
-fig.canvas.draw()
-ax_background = fig.canvas.copy_from_bbox(ax.bbox)
-fig.show()
-
-frame = np.zeros(mlx_shape[0] * mlx_shape[1])
-t_array = []
-snapshot_filename = "image_capture.jpg"
-
-# Create a function to read the temperature from the MLX90640 infrared camera
-def read_mlx90640_temperature():
+def mlx90640_camera():
+    # Set up the MLX90640 infrared camera
     global room_temperature, body_temperature
+    
     while True:
+        i2c = busio.I2C(board.SCL, board.SDA, frequency=400000)
+        mlx = adafruit_mlx90640.MLX90640(i2c)
+        mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_2_HZ
+        mlx_shape = (24, 32)
+
+        mlx_interp_val = 10
+        mlx_interp_shape = (mlx_shape[0] * mlx_interp_val, mlx_shape[1] * mlx_interp_val)
+
+        fig = plt.figure(figsize=(12, 9))
+        ax = fig.add_subplot(111)
+        fig.subplots_adjust(0.05, 0.05, 0.95, 0.95)
+        
+        color_map = plt.cm.seismic
+        
+        if check_internet():
+            color_map = db.child('image_color/color').get().val()
+            if(color_map == 1):
+                color_map = plt.cm.gist_gray
+            elif(color_map == 2):
+                color_map = plt.cm.hot
+            elif(color_map == 3):
+                color_map = plt.cm.Greens.reversed()
+            elif(color_map == 4):
+                color_map = plt.cm.seismic
+            
+            
+
+        therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=25, vmax=45)
+
+        cbar = fig.colorbar(therm1)
+        cbar.set_label('Temperature °C', fontsize=14)
+
+        fig.canvas.draw()
+        ax_background = fig.canvas.copy_from_bbox(ax.bbox)
+        fig.show()
+
+        frame = np.zeros(mlx_shape[0] * mlx_shape[1])
+        t_array = []
+        snapshot_filename = "image_capture.jpg"
+
+        # Create a function to read the temperature from the MLX90640 infrared camera
         try:
             mlx.getFrame(frame)
             room_temperature = np.mean(frame)
@@ -133,37 +139,33 @@ def read_mlx90640_temperature():
                 db.child("camera_sensor").update({"bodyTemp": body_temperature})
                 db.child("camera_sensor").update({"roomTemp": room_temperature})
                 
+                # Create a function to capture and upload the image from the MLX90640 infrared camera
+                mlx.getFrame(frame)
+                data_array = np.reshape(frame, mlx_shape)
+                data_array = ndimage.zoom(data_array, mlx_interp_val)
+                therm1.set_array(data_array)
+                therm1.set_clim(vmin=np.min(data_array), vmax=np.max(data_array))
+                cbar.update_normal(therm1)
+                ax.draw_artist(therm1)
+                fig.canvas.blit(ax.bbox)
+                fig.canvas.flush_events()
+
+                # Save snapshot image
+                fig.savefig(snapshot_filename, bbox_inches='tight')
+
+                # Upload snapshot image to Firebase Storage
+                storage.child(snapshot_filename).put(snapshot_filename)
+
+                # Delete the local snapshot image after uploading to Firebase Storage
+                os.remove(snapshot_filename)
+            
         except (ValueError, RuntimeError) as e:
-            print("MLX90640 Getting Room Temp & Body Temp:", str(e))
+            print("MLX90640 Camera Error:", str(e))
             continue  # if error, just read again
+        
         time.sleep(1)  # Adjust the delay between readings as needed
 
-# Create a function to capture and upload the image from the MLX90640 infrared camera
-def capture_and_upload_image():
-    while True:
-        try:
-            mlx.getFrame(frame)
-            data_array = np.reshape(frame, mlx_shape)
-            data_array = ndimage.zoom(data_array, mlx_interp_val)
-            therm1.set_array(data_array)
-            therm1.set_clim(vmin=np.min(data_array), vmax=np.max(data_array))
-            cbar.update_normal(therm1)
-            ax.draw_artist(therm1)
-            fig.canvas.blit(ax.bbox)
-            fig.canvas.flush_events()
-
-            # Save snapshot image
-            fig.savefig(snapshot_filename, bbox_inches='tight')
-
-            # Upload snapshot image to Firebase Storage
-            storage.child(snapshot_filename).put(snapshot_filename)
-
-            # Delete the local snapshot image after uploading to Firebase Storage
-            os.remove(snapshot_filename)
-        except (ValueError, RuntimeError) as e:
-            print("Capture and Send Image to Database:", str(e))
-            continue  # if error, just read again
-        time.sleep(1)  # Adjust the delay between readings as needed
+    
 
 def calculate_remaining_days():
     global max_temp_depending_on_day, min_temp_depending_on_day
@@ -281,7 +283,7 @@ def rotate_forward():
                     db.child("motor_status").update({"status": "rolling down"})
                     db.child("fan_status").update({"status": "OFF"})
                 
-                for i in range(10):
+                for i in range(5):
                     for i in range(512):
                         for halfstep in range(8):
                             for pin in range(4):
@@ -324,7 +326,7 @@ def rotate_backward():
                     db.child("motor_status").update({"status": "rolling up"})
                     db.child("fan_status").update({"status": "OFF"})
                 
-                for i in range(10):
+                for i in range(5):
                     for i in range(512):
                         for halfstep in reversed(range(8)):
                             for pin in range(4):
@@ -474,8 +476,7 @@ def oled_screen_display():
 check_internet_thread = threading.Thread(target=check_internet)
 oled_screen_thread = threading.Thread(target=oled_screen_display)
 dht_thread = threading.Thread(target=read_dht11_sensor)
-mlx_temp_thread = threading.Thread(target=read_mlx90640_temperature)
-capture_thread = threading.Thread(target=capture_and_upload_image)
+mlx_camera_thread = threading.Thread(target=mlx90640_camera)
 calculate_days_thread = threading.Thread(target=calculate_remaining_days)
 update_firebase_thread = threading.Thread(target=update_firebase)
 bulb_thread = threading.Thread(target=bulb_on)
@@ -483,14 +484,13 @@ bulb_thread = threading.Thread(target=bulb_on)
 
 check_internet_thread.start()
 dht_thread.start()
-mlx_temp_thread.start()
+mlx_camera_thread.start()
 calculate_days_thread.start()
 oled_screen_thread.start()
 bulb_thread.start()
 
 
 if check_internet():
-    capture_thread.start()
     update_firebase_thread.start()
     
 # Create and start the threads
