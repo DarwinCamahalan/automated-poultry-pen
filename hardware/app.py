@@ -100,21 +100,19 @@ def mlx90640_camera():
         ax = fig.add_subplot(111)
         fig.subplots_adjust(0.05, 0.05, 0.95, 0.95)
         
-        color_map = plt.cm.seismic
+        color_map = plt.cm.bwr
         
         if check_internet():
             color_map = db.child('image_color/color').get().val()
             if(color_map == 1):
-                color_map = plt.cm.gist_gray
+                color_map = plt.cm.bwr
             elif(color_map == 2):
-                color_map = plt.cm.hot
+                color_map = plt.cm.gist_gray
             elif(color_map == 3):
-                color_map = plt.cm.Greens.reversed()
+                color_map = plt.cm.hot
             elif(color_map == 4):
-                color_map = plt.cm.seismic
-            
-            
-
+                color_map = plt.cm.Greens.reversed()
+                
         therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=25, vmax=45)
 
         cbar = fig.colorbar(therm1)
