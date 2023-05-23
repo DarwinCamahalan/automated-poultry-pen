@@ -8,7 +8,135 @@
   .green {
     color: rgb(0, 222, 0);
   }
-
+  .button1 {
+    border: 0;
+    background: rgb(5, 0, 82);
+    background: linear-gradient(
+      90deg,
+      rgba(5, 0, 82, 1) 27%,
+      rgba(152, 0, 0, 1) 87%
+    );
+  }
+  .button2 {
+    border: 0;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 1) 18%,
+      rgba(78, 77, 77, 1) 62%,
+      rgba(255, 255, 255, 1) 87%
+    );
+  }
+  .button3 {
+    border: 0;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(176, 0, 0, 1) 50%,
+      rgba(255, 253, 88, 1) 85%
+    );
+  }
+  .button4 {
+    border: 0;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(16, 113, 0, 1) 62%,
+      rgba(255, 255, 255, 1) 87%
+    );
+  }
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    margin: 0 1em 1em 1em;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+    p {
+      width: auto;
+      background-color: #161b22;
+      border: 1px solid #28313d;
+      padding: 0.5em;
+      margin: 0.5em 0;
+      border-radius: 0.8em;
+      font-size: 0.75em;
+      &:hover {
+        cursor: pointer;
+        border: 0;
+        transform: scale(1.05);
+      }
+      &:first-child {
+        margin-top: 1em;
+      }
+      &:nth-child(1):hover {
+        background: rgb(5, 0, 82);
+        background: linear-gradient(
+          90deg,
+          rgba(5, 0, 82, 1) 27%,
+          rgba(152, 0, 0, 1) 87%
+        );
+      }
+      &:nth-child(2):hover {
+        background: rgb(0, 0, 0);
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 1) 18%,
+          rgba(78, 77, 77, 1) 62%,
+          rgba(255, 255, 255, 1) 87%
+        );
+      }
+      &:nth-child(3):hover {
+        background: rgb(0, 0, 0);
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 1) 0%,
+          rgba(176, 0, 0, 1) 50%,
+          rgba(255, 253, 88, 1) 85%
+        );
+      }
+      &:nth-child(4):hover {
+        background: rgb(0, 0, 0);
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 1) 0%,
+          rgba(16, 113, 0, 1) 62%,
+          rgba(255, 255, 255, 1) 87%
+        );
+      }
+    }
+  }
+  .colorChangeMessage {
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    border-radius: 0.8em;
+    background-color: rgb(131, 0, 0);
+    h1 {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 1em;
+      background-color: red;
+      border-radius: 0.6em 0.6em 0 0;
+      padding: 0.5em 0;
+      .warningIcon {
+        margin: 0 0.3em 0 0.3em;
+        font-size: 1.15em;
+      }
+    }
+    p {
+      padding: 0.5em 1em;
+      font-size: 0.8em;
+      color: white;
+    }
+  }
   .motorStatus {
     position: absolute;
     width: 100%;
@@ -169,6 +297,7 @@
 
     .bulb {
       position: relative;
+      margin-bottom: 0;
       .bulbIcon {
         position: absolute;
         top: -15%;

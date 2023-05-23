@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./content.module.scss";
 import { db } from "../firebaseConfig";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, set } from "firebase/database";
 import {
   getStorage,
   ref as storageRef,
@@ -16,7 +16,7 @@ import { FaTemperatureLow } from "react-icons/fa";
 import { BiCameraHome } from "react-icons/bi";
 import { GoLightBulb } from "react-icons/go";
 import { HiInformationCircle } from "react-icons/hi";
-import { ImSpinner9 } from "react-icons/im";
+import { ImSpinner9, ImWarning } from "react-icons/im";
 import { IoBulbSharp } from "react-icons/io5";
 import { GiChicken } from "react-icons/gi";
 
@@ -28,9 +28,38 @@ const Content = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [daysCount, setDaysCount] = useState(null);
   const [startDate, setStartDate] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [toggleMessageColor, setToggleMessageColor] = useState(false);
   const [motorStatus, setMotorStatus] = useState("");
   const [fanStatus, setFanStatus] = useState("");
   const [bulbStatus, setBulbStatus] = useState("");
+
+  const handleColorSelection = (color) => {
+    setToggleMessageColor(true);
+    setTimeout(() => {
+      setToggleMessageColor(false);
+    }, 25000);
+    setSelectedColor(color);
+    updateFirebaseColor(color);
+  };
+
+  const updateFirebaseColor = (color) => {
+    set(ref(db, "image_color/color"), color)
+      .then(() => {
+        console.log("Color updated successfully!");
+      })
+      .catch((error) => {
+        console.log("Error updating color:", error);
+      });
+  };
+
+  useEffect(() => {
+    const colorRef = ref(db, "image_color/color");
+    onValue(colorRef, (snapshot) => {
+      const color = snapshot.val();
+      setSelectedColor(color);
+    });
+  }, []);
 
   useEffect(() => {
     const dhtSensorRef = ref(db, "dht_sensor");
@@ -123,6 +152,26 @@ const Content = () => {
     else return styles.fanON;
   };
 
+  const buttonStyle1 = () => {
+    if (selectedColor === 1) return styles.button1;
+    else return null;
+  };
+
+  const buttonStyle2 = () => {
+    if (selectedColor === 2) return styles.button2;
+    else return null;
+  };
+
+  const buttonStyle3 = () => {
+    if (selectedColor === 3) return styles.button3;
+    else return null;
+  };
+
+  const buttonStyle4 = () => {
+    if (selectedColor === 4) return styles.button4;
+    else return null;
+  };
+
   return (
     <div className={styles.contentBG}>
       {motorStatus !== "OFF" ? (
@@ -134,6 +183,16 @@ const Content = () => {
             </h1>
             <p>Stepper Motor is now {motorStatus}.</p>
           </div>
+        </div>
+      ) : null}
+
+      {toggleMessageColor ? (
+        <div className={styles.colorChangeMessage}>
+          <h1>
+            <ImWarning className={styles.warningIcon} />
+            Changing Color
+          </h1>
+          <p>It will take time, please wait...</p>
         </div>
       ) : null}
       <div className={styles.info}>
@@ -186,10 +245,27 @@ const Content = () => {
             </span>
           </p>
         </div>
+
+        <div className={styles.buttons}>
+          <p className={buttonStyle1()} onClick={() => handleColorSelection(1)}>
+            Default Color
+          </p>
+          <p className={buttonStyle2()} onClick={() => handleColorSelection(2)}>
+            Grayscale
+          </p>
+          <p className={buttonStyle3()} onClick={() => handleColorSelection(3)}>
+            Contour
+          </p>
+          <p className={buttonStyle4()} onClick={() => handleColorSelection(4)}>
+            Mask
+          </p>
+        </div>
       </div>
+      {/* IMAGE */}
       <div className={styles.cameraImage}>
         {imageUrl && <img src={imageUrl} alt="Camera" />}
       </div>
+      {/* IMAGE */}
       <div className={styles.sensors}>
         <div className={styles.averageTemp}>
           <FaTemperatureLow className={styles.avgTempIcon} />
