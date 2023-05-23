@@ -19,3 +19,18 @@
     }
   }
 }
+
+@media only screen and (max-width: 1000px) {
+  .navbarBG {
+    height: 4em;
+    .layout {
+      .img {
+        width: 2.5em;
+        height: auto;
+      }
+      h1 {
+        font-size: 1em;
+      }
+    }
+  }
+}

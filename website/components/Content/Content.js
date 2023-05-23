@@ -186,15 +186,6 @@ const Content = () => {
         </div>
       ) : null}
 
-      {toggleMessageColor ? (
-        <div className={styles.colorChangeMessage}>
-          <h1>
-            <ImWarning className={styles.warningIcon} />
-            Changing Color
-          </h1>
-          <p>It will take time, please wait...</p>
-        </div>
-      ) : null}
       <div className={styles.info}>
         <div className={styles.dayCount}>
           <BsCalendar4Week className={styles.dayIcon} />
@@ -264,6 +255,15 @@ const Content = () => {
       {/* IMAGE */}
       <div className={styles.cameraImage}>
         {imageUrl && <img src={imageUrl} alt="Camera" />}
+        {toggleMessageColor ? (
+          <div className={styles.colorChangeMessage}>
+            <h1>
+              <ImWarning className={styles.warningIcon} />
+              Changing Color
+            </h1>
+            <p>It will take time, please wait...</p>
+          </div>
+        ) : null}
       </div>
       {/* IMAGE */}
       <div className={styles.sensors}>
