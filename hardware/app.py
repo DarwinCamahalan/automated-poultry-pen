@@ -100,12 +100,12 @@ def mlx90640_camera():
         ax = fig.add_subplot(111)
         fig.subplots_adjust(0.05, 0.05, 0.95, 0.95)
         
-        color_map = plt.cm.bwr
+        color_map = plt.cm.seismic
         
         if check_internet():
             color_map = db.child('image_color/color').get().val()
             if(color_map == 1):
-                color_map = plt.cm.bwr
+                color_map = plt.cm.seismic
             elif(color_map == 2):
                 color_map = plt.cm.gist_gray
             elif(color_map == 3):
@@ -113,7 +113,7 @@ def mlx90640_camera():
             elif(color_map == 4):
                 color_map = plt.cm.Greens.reversed()
                 
-        therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=25, vmax=45)
+        therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=18, vmax=38)
 
         cbar = fig.colorbar(therm1)
         cbar.set_label('Temperature °C', fontsize=14)
@@ -348,34 +348,33 @@ def rotate_backward():
             
 def fan_on():
     global  fan_status
-
+    while True:
     # ENABLED
     # 7:01PM - 6:59AM CLOSE
     
     # DAY 1-3 - temperature > 34 
     # DAY 4-7 - temperature > 34 
     # DAY 8-14 - temperature > 31 
-    if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
-        while(humidity > 60):
-        # while (temperature > max_temp_depending_on_day):
-            GPIO.output(relay_pin_1, GPIO.HIGH)
-            fan_status = "ON"
+        if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
+            if(humidity > 60):
+            # while (temperature > max_temp_depending_on_day):
+                GPIO.output(relay_pin_1, GPIO.HIGH)
+                fan_status = "ON"
 
-            if check_internet():
-                db.child("fan_status").update({"status": "ON"})
-                db.child("motor_status").update({"status": "OFF"})
-            
-            # time.sleep(300)
-            time.sleep(60)
-            
-            GPIO.output(relay_pin_1, GPIO.LOW)
+                if check_internet():
+                    db.child("fan_status").update({"status": "ON"})
+                    db.child("motor_status").update({"status": "OFF"})
+                
+                time.sleep(300)
+                
+                GPIO.output(relay_pin_1, GPIO.LOW)
 
-            fan_status = "OFF"
+                fan_status = "OFF"
 
-            if check_internet():
-                db.child("fan_status").update({"status": "OFF"})
+                if check_internet():
+                    db.child("fan_status").update({"status": "OFF"})
 
-            time.sleep(60)
+                time.sleep(30)
     
 def bulb_on():
     global bulb_status
@@ -391,8 +390,7 @@ def bulb_on():
         if check_internet():
             db.child("bulb_status").update({"status": "ON"})
     
-        # time.sleep(300)
-        time.sleep(60)
+        time.sleep(300)
     
         GPIO.output(relay_pin_2, GPIO.LOW)
         bulb_status = "OFF"
@@ -400,7 +398,7 @@ def bulb_on():
         if check_internet():
             db.child("bulb_status").update({"status": "OFF"})
 
-        time.sleep(60)
+        time.sleep(30)
  
 def oled_screen_display():
     while True:
