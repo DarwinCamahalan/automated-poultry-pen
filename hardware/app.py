@@ -81,7 +81,7 @@ def read_dht11_sensor():
         except Exception as e:
             print(f"DHT11: {str(e)}")               
             continue
-        time.sleep(1)  # Adjust the delay between readings as needed
+        time.sleep(0.5)  # Adjust the delay between readings as needed
 
 def mlx90640_camera():
     # Set up the MLX90640 infrared camera
@@ -109,11 +109,11 @@ def mlx90640_camera():
             elif(color_map == 2):
                 color_map = plt.cm.gist_gray
             elif(color_map == 3):
-                color_map = plt.cm.hot
+                color_map = plt.cm.hot.reversed()
             elif(color_map == 4):
                 color_map = plt.cm.Greens.reversed()
                 
-        therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=18, vmax=38)
+        therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=29, vmax=34)
 
         cbar = fig.colorbar(therm1)
         cbar.set_label('Temperature °C', fontsize=14)
@@ -160,7 +160,7 @@ def mlx90640_camera():
             print("MLX90640 Camera Error:", str(e))
             continue  # if error, just read again
         
-        time.sleep(1)  # Adjust the delay between readings as needed
+        time.sleep(0.5)  # Adjust the delay between readings as needed
 
     
 
@@ -272,7 +272,7 @@ def rotate_forward():
         # DAY 8-14 - temperature > 31 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
             if (humidity > 60):
-            # while (temperature < min_temp_depending_on_day):    
+            # if (temperature < min_temp_depending_on_day):    
                 motor_status="ON"
                 rolling_direction="Rolling Forward."
                 
@@ -315,7 +315,7 @@ def rotate_backward():
         # DAY 8-14 - temperature < 29 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
             if (humidity < 60):
-            # while (temperature < min_temp_depending_on_day): 
+            # if (temperature < min_temp_depending_on_day): 
                 motor_status = "ON"
                 rolling_direction = "Rolling Backward."
 
@@ -356,7 +356,7 @@ def fan_on():
     # DAY 8-14 - temperature > 31 
         if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
             if(humidity > 60):
-            # while (temperature > max_temp_depending_on_day):
+            # if (temperature > max_temp_depending_on_day):
                 GPIO.output(relay_pin_1, GPIO.HIGH)
                 fan_status = "ON"
 
@@ -382,7 +382,7 @@ def bulb_on():
     # DAY 4-7 - temperature < 32 
     # DAY 8-14 - temperature < 29 
     while (humidity < 60):
-    # if (temperature < min_temp_depending_on_day):
+    # while (temperature < min_temp_depending_on_day):
         GPIO.output(relay_pin_2, GPIO.HIGH)
         bulb_status = "ON"    
     
@@ -403,15 +403,15 @@ def oled_screen_display():
     while True:
         oled.clear()
         oled.text("   DHT11 Sensor", 1)
-        oled.text("Humidity: {}%".format(humidity), 3)
-        oled.text("Temp.: {}°C".format(temperature), 4)
+        oled.text("Temperature: {}°C".format(temperature), 3)
+        oled.text("Humidity: {}%".format(humidity), 4)
         oled.show()
 
         time.sleep(3)
 
         oled.clear()
         oled.text("  MLX90640 Sensor", 1)
-        oled.text("Room Temp: {}°C".format(int(room_temperature)), 3)
+        oled.text("Ambient Temp: {}°C".format(int(room_temperature)), 3)
         oled.text("Body Temp: {}°C".format(int(body_temperature)), 4)
         oled.show()
 
