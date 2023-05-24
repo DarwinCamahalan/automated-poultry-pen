@@ -19,3 +19,22 @@ STOP SCRIPT RUNNING
 
 sudo systemctl stop app
 sudo systemctl status app
+
+
+
+IF NO WIFI
+
+sudo nano /etc/network/interfaces
+sudo systemctl enable dhcpcd
+sudo systemctl disable networking
+sudo reboot
+
+
+EDIT WIFI
+
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+network={
+    ssid="your-network-ssid"
+    psk="your-network-password"
+}
+
