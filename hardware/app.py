@@ -113,7 +113,7 @@ def mlx90640_camera():
             elif(color_map == 4):
                 color_map = plt.cm.Greens.reversed()
                 
-        therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=16, vmax=36)
+        therm1 = ax.imshow(np.zeros(mlx_interp_shape), interpolation='none', cmap=color_map, vmin=18, vmax=38)
 
         cbar = fig.colorbar(therm1)
         cbar.set_label('Temperature °C', fontsize=14)
