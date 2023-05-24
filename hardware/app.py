@@ -163,7 +163,7 @@ def mlx90640_camera():
                 plt.close(fig)
                 
                 if should_send_image_30_minutes():
-                    image_for_training_AI = f"image_{datetime.datetime.now().strftime('%b %d, %Y - %I:%M %p')}.jpg"
+                    image_for_training_AI = f"Day {days_left} {datetime.datetime.now().strftime('- %I:%M %p')}.jpg"
                     fig.savefig(image_for_training_AI, bbox_inches='tight')
                     storage.child("images_for_AI/" + image_for_training_AI).put(image_for_training_AI)
                     os.remove(image_for_training_AI)
@@ -289,39 +289,40 @@ def rotate_forward():
         # DAY 8-14 - temperature > 31 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
             # if (humidity > 60):
-            if (temperature > max_temp_depending_on_day):    
-                motor_status="ON"
-                rolling_direction="Rolling Forward."
-                
-                if check_internet():
-                    db.child("motor_status").update({"status": "rolling down"})
-                    db.child("fan_status").update({"status": "OFF"})
-                
-                for i in range(5):
-                    for i in range(512):
-                        for halfstep in range(8):
-                            for pin in range(4):
-                                GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
-                                GPIO.output(MotorPin_B[pin], seq[halfstep][pin])
-                            time.sleep(0.001)
-                
-                motor_status="OFF"
-                rolling_direction=""
+            if(temperature != 0):
+                if (temperature > max_temp_depending_on_day):    
+                    motor_status="ON"
+                    rolling_direction="Rolling Forward."
+                    
+                    if check_internet():
+                        db.child("motor_status").update({"status": "rolling down"})
+                        db.child("fan_status").update({"status": "OFF"})
+                    
+                    for i in range(5):
+                        for i in range(512):
+                            for halfstep in range(8):
+                                for pin in range(4):
+                                    GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
+                                    GPIO.output(MotorPin_B[pin], seq[halfstep][pin])
+                                time.sleep(0.001)
+                    
+                    motor_status="OFF"
+                    rolling_direction=""
 
-                if check_internet():
-                    db.child("motor_status").update({"status": "OFF"})
-                
-                time.sleep(60)
-                # DAY 1-3 - temperature > 34 
-                # DAY 4-7 - temperature > 34 
-                # DAY 8-14 - temperature > 31
-                
-                # while (humidity > 60):
-                #     if(humidity < 60):
-                #         continue
-                while (temperature > max_temp_depending_on_day):
-                    if(temperature < min_temp_depending_on_day):
-                        continue               
+                    if check_internet():
+                        db.child("motor_status").update({"status": "OFF"})
+                    
+                    time.sleep(60)
+                    # DAY 1-3 - temperature > 34 
+                    # DAY 4-7 - temperature > 34 
+                    # DAY 8-14 - temperature > 31
+                    
+                    # while (humidity > 60):
+                    #     if(humidity < 60):
+                    #         continue
+                    while (temperature > max_temp_depending_on_day):
+                        if(temperature < min_temp_depending_on_day):
+                            continue               
                 
 
     
@@ -337,40 +338,41 @@ def rotate_backward():
         # DAY 8-14 - temperature < 29 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
             # if (humidity < 60):
-            if (temperature < min_temp_depending_on_day): 
-                motor_status = "ON"
-                rolling_direction = "Rolling Backward."
+            if(temperature != 0):
+                if (temperature < min_temp_depending_on_day): 
+                    motor_status = "ON"
+                    rolling_direction = "Rolling Backward."
 
-                if check_internet():
-                    db.child("motor_status").update({"status": "rolling up"})
-                    db.child("fan_status").update({"status": "OFF"})
-                
-                for i in range(5):
-                    for i in range(512):
-                        for halfstep in reversed(range(8)):
-                            for pin in range(4):
-                                GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
-                                GPIO.output(MotorPin_B[pin], seq[halfstep][pin])
-                            time.sleep(0.001)
-                
-                motor_status = "OFF"
-                rolling_direction = ""
-                
-                if check_internet():
-                    db.child("motor_status").update({"status": "OFF"})
+                    if check_internet():
+                        db.child("motor_status").update({"status": "rolling up"})
+                        db.child("fan_status").update({"status": "OFF"})
+                    
+                    for i in range(5):
+                        for i in range(512):
+                            for halfstep in reversed(range(8)):
+                                for pin in range(4):
+                                    GPIO.output(MotorPin_A[pin], seq[halfstep][pin])
+                                    GPIO.output(MotorPin_B[pin], seq[halfstep][pin])
+                                time.sleep(0.001)
+                    
+                    motor_status = "OFF"
+                    rolling_direction = ""
+                    
+                    if check_internet():
+                        db.child("motor_status").update({"status": "OFF"})
 
-                time.sleep(60)
-                # DAY 1-3 - temperature < 33 
-                # DAY 4-7 - temperature < 32 
-                # DAY 8-14 - temperature < 29 
-                
-                # while(humidity < 60):
-                #     if(humidity > 60):
-                #         continue
+                    time.sleep(60)
+                    # DAY 1-3 - temperature < 33 
+                    # DAY 4-7 - temperature < 32 
+                    # DAY 8-14 - temperature < 29 
+                    
+                    # while(humidity < 60):
+                    #     if(humidity > 60):
+                    #         continue
 
-                while (temperature < min_temp_depending_on_day):
-                    if(temperature > max_temp_depending_on_day):
-                        continue  
+                    while (temperature < min_temp_depending_on_day):
+                        if(temperature > max_temp_depending_on_day):
+                            continue  
             
 def fan_on():
     global  fan_status
@@ -383,24 +385,25 @@ def fan_on():
     # DAY 8-14 - temperature > 31 
         if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
             # if(humidity > 60):
-            if (temperature > max_temp_depending_on_day):
-                GPIO.output(relay_pin_1, GPIO.HIGH)
-                fan_status = "ON"
+            if(temperature != 0):
+                if (temperature > max_temp_depending_on_day):
+                    GPIO.output(relay_pin_1, GPIO.HIGH)
+                    fan_status = "ON"
 
-                if check_internet():
-                    db.child("fan_status").update({"status": "ON"})
-                    db.child("motor_status").update({"status": "OFF"})
-                
-                time.sleep(300)
-                
-                GPIO.output(relay_pin_1, GPIO.LOW)
+                    if check_internet():
+                        db.child("fan_status").update({"status": "ON"})
+                        db.child("motor_status").update({"status": "OFF"})
+                    
+                    time.sleep(300)
+                    
+                    GPIO.output(relay_pin_1, GPIO.LOW)
 
-                fan_status = "OFF"
+                    fan_status = "OFF"
 
-                if check_internet():
-                    db.child("fan_status").update({"status": "OFF"})
+                    if check_internet():
+                        db.child("fan_status").update({"status": "OFF"})
 
-                time.sleep(30)
+                    time.sleep(30)
     
 def bulb_on():
     global bulb_status
@@ -409,22 +412,23 @@ def bulb_on():
     # DAY 4-7 - temperature < 32 
     # DAY 8-14 - temperature < 29 
     # while (humidity < 60):
-    while (temperature < min_temp_depending_on_day):
-        GPIO.output(relay_pin_2, GPIO.HIGH)
-        bulb_status = "ON"    
-    
-        if check_internet():
-            db.child("bulb_status").update({"status": "ON"})
-    
-        time.sleep(300)
-    
-        GPIO.output(relay_pin_2, GPIO.LOW)
-        bulb_status = "OFF"
-    
-        if check_internet():
-            db.child("bulb_status").update({"status": "OFF"})
+    if(temperature != 0):
+        while (temperature < min_temp_depending_on_day):
+            GPIO.output(relay_pin_2, GPIO.HIGH)
+            bulb_status = "ON"    
+        
+            if check_internet():
+                db.child("bulb_status").update({"status": "ON"})
+        
+            time.sleep(300)
+        
+            GPIO.output(relay_pin_2, GPIO.LOW)
+            bulb_status = "OFF"
+        
+            if check_internet():
+                db.child("bulb_status").update({"status": "OFF"})
 
-        time.sleep(30)
+            time.sleep(30)
         
  
 def oled_screen_display():
