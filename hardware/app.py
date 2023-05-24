@@ -8,6 +8,7 @@ import pyrebase
 import Adafruit_DHT
 import matplotlib.pyplot as plt
 import cv2
+import socket
 import os
 import json
 from scipy import ndimage
@@ -26,6 +27,7 @@ bulb_status="OFF"
 fan_status="OFF"
 motor_status = "OFF"
 rolling_direction=""
+image_for_training_AI = ""
 days_left=0
 humidity=0
 temperature=0
@@ -42,13 +44,14 @@ EVENING_END_TIME = datetime.time(6, 59)
 
 def check_internet():
     global online
-    try:
-        urllib.request.urlopen('http://www.google.com', timeout=1)
-        online = "Online"
-        return True
-    except urllib.request.URLError:
-        online = "Offline"
-        return False
+    while True:
+        try:
+            urllib.request.urlopen('http://www.google.com', timeout=1)
+            online = "Online"
+            return True
+        except (urllib.error.URLError, socket.timeout):
+            online = "Offline"
+            return False
 
 if check_internet():
     # Configure Firebase with your credentials
@@ -81,12 +84,13 @@ def read_dht11_sensor():
         except Exception as e:
             print(f"DHT11: {str(e)}")               
             continue
-        time.sleep(0.5)  # Adjust the delay between readings as needed
+        time.sleep(0.7)  # Adjust the delay between readings as needed
 
 def mlx90640_camera():
     # Set up the MLX90640 infrared camera
     global room_temperature, body_temperature
-    
+    global image_for_training_AI
+
     while True:
         i2c = busio.I2C(board.SCL, board.SDA, frequency=400000)
         mlx = adafruit_mlx90640.MLX90640(i2c)
@@ -152,17 +156,30 @@ def mlx90640_camera():
 
                 # Upload snapshot image to Firebase Storage
                 storage.child(snapshot_filename).put(snapshot_filename)
-
+                
                 # Delete the local snapshot image after uploading to Firebase Storage
                 os.remove(snapshot_filename)
+                
+                plt.close(fig)
+                
+                if should_send_image_30_minutes():
+                    image_for_training_AI = f"image_{datetime.datetime.now().strftime('%b %d, %Y - %I:%M %p')}.jpg"
+                    fig.savefig(image_for_training_AI, bbox_inches='tight')
+                    storage.child("images_for_AI/" + image_for_training_AI).put(image_for_training_AI)
+                    os.remove(image_for_training_AI)
+                    plt.close(fig)
+
             
         except (ValueError, RuntimeError) as e:
             print("MLX90640 Camera Error:", str(e))
             continue  # if error, just read again
         
-        time.sleep(0.5)  # Adjust the delay between readings as needed
+        time.sleep(0.7)  # Adjust the delay between readings as needed
 
-    
+def should_send_image_30_minutes():
+    while True:
+        current_time = datetime.datetime.now()
+        return current_time.minute % 30 == 0
 
 def calculate_remaining_days():
     global max_temp_depending_on_day, min_temp_depending_on_day
@@ -271,8 +288,8 @@ def rotate_forward():
         # DAY 4-7 - temperature > 34 
         # DAY 8-14 - temperature > 31 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
-            if (humidity > 60):
-            # if (temperature < min_temp_depending_on_day):    
+            # if (humidity > 60):
+            if (temperature > max_temp_depending_on_day):    
                 motor_status="ON"
                 rolling_direction="Rolling Forward."
                 
@@ -298,9 +315,14 @@ def rotate_forward():
                 # DAY 1-3 - temperature > 34 
                 # DAY 4-7 - temperature > 34 
                 # DAY 8-14 - temperature > 31
-                while (humidity > 60):
-                    if(humidity < 60):
-                        continue
+                
+                # while (humidity > 60):
+                #     if(humidity < 60):
+                #         continue
+                while (temperature > max_temp_depending_on_day):
+                    if(temperature < min_temp_depending_on_day):
+                        continue               
+                
 
     
 def rotate_backward():
@@ -314,8 +336,8 @@ def rotate_backward():
         # DAY 4-7 - temperature < 32 
         # DAY 8-14 - temperature < 29 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
-            if (humidity < 60):
-            # if (temperature < min_temp_depending_on_day): 
+            # if (humidity < 60):
+            if (temperature < min_temp_depending_on_day): 
                 motor_status = "ON"
                 rolling_direction = "Rolling Backward."
 
@@ -341,9 +363,14 @@ def rotate_backward():
                 # DAY 1-3 - temperature < 33 
                 # DAY 4-7 - temperature < 32 
                 # DAY 8-14 - temperature < 29 
-                while(humidity < 60):
-                    if(humidity > 60):
-                        continue
+                
+                # while(humidity < 60):
+                #     if(humidity > 60):
+                #         continue
+
+                while (temperature < min_temp_depending_on_day):
+                    if(temperature > max_temp_depending_on_day):
+                        continue  
             
 def fan_on():
     global  fan_status
@@ -355,8 +382,8 @@ def fan_on():
     # DAY 4-7 - temperature > 34 
     # DAY 8-14 - temperature > 31 
         if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
-            if(humidity > 60):
-            # if (temperature > max_temp_depending_on_day):
+            # if(humidity > 60):
+            if (temperature > max_temp_depending_on_day):
                 GPIO.output(relay_pin_1, GPIO.HIGH)
                 fan_status = "ON"
 
@@ -381,8 +408,8 @@ def bulb_on():
     # DAY 1-3 - temperature < 33 
     # DAY 4-7 - temperature < 32 
     # DAY 8-14 - temperature < 29 
-    while (humidity < 60):
-    # while (temperature < min_temp_depending_on_day):
+    # while (humidity < 60):
+    while (temperature < min_temp_depending_on_day):
         GPIO.output(relay_pin_2, GPIO.HIGH)
         bulb_status = "ON"    
     
@@ -398,6 +425,7 @@ def bulb_on():
             db.child("bulb_status").update({"status": "OFF"})
 
         time.sleep(30)
+        
  
 def oled_screen_display():
     while True:
@@ -465,8 +493,6 @@ def oled_screen_display():
         
         time.sleep(3)  # Adjust the delay between sensor updates as per your requirement
 
-
-
 # Create and start the threads for DHT11 sensor, MLX90640 temperature, image capture, and stepper motor control
 check_internet_thread = threading.Thread(target=check_internet)
 oled_screen_thread = threading.Thread(target=oled_screen_display)
@@ -474,7 +500,6 @@ dht_thread = threading.Thread(target=read_dht11_sensor)
 mlx_camera_thread = threading.Thread(target=mlx90640_camera)
 calculate_days_thread = threading.Thread(target=calculate_remaining_days)
 update_firebase_thread = threading.Thread(target=update_firebase)
-bulb_thread = threading.Thread(target=bulb_on)
 
 
 check_internet_thread.start()
@@ -482,8 +507,6 @@ dht_thread.start()
 mlx_camera_thread.start()
 calculate_days_thread.start()
 oled_screen_thread.start()
-bulb_thread.start()
-
 
 if check_internet():
     update_firebase_thread.start()
@@ -492,7 +515,11 @@ if check_internet():
 forward_thread = threading.Thread(target=rotate_forward)
 backward_thread = threading.Thread(target=rotate_backward)
 fan_thread = threading.Thread(target=fan_on)
+bulb_thread = threading.Thread(target=bulb_on)
+should_send_image_30_minutes_thread = threading.Thread(target=should_send_image_30_minutes)
 
 forward_thread.start()
 backward_thread.start()
 fan_thread.start()
+bulb_thread.start()
+should_send_image_30_minutes_thread.start()
