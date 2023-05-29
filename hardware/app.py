@@ -254,6 +254,9 @@ relay_pin_2 = 24 # FAN
 GPIO.setup(relay_pin_1, GPIO.OUT)
 GPIO.setup(relay_pin_2, GPIO.OUT)
 
+GPIO.output(relay_pin_1, GPIO.LOW)
+GPIO.output(relay_pin_2, GPIO.LOW)
+
 MotorPin_A = [17, 18, 27, 22]
 MotorPin_B = [12, 13, 6, 5]
 
@@ -288,7 +291,7 @@ def rotate_forward():
         # DAY 4-7 - temperature > 34 
         # DAY 8-14 - temperature > 31 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
-            # if (humidity > 60):
+
             if(temperature != 0):
                 if (temperature > max_temp_depending_on_day):    
                     motor_status="ON"
@@ -296,7 +299,6 @@ def rotate_forward():
                     
                     if check_internet():
                         db.child("motor_status").update({"status": "rolling down"})
-                        db.child("fan_status").update({"status": "OFF"})
                     
                     for i in range(5):
                         for i in range(512):
@@ -337,7 +339,6 @@ def rotate_backward():
         # DAY 4-7 - temperature < 32 
         # DAY 8-14 - temperature < 29 
         if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
-            # if (humidity < 60):
             if(temperature != 0):
                 if (temperature < min_temp_depending_on_day): 
                     motor_status = "ON"
@@ -345,7 +346,6 @@ def rotate_backward():
 
                     if check_internet():
                         db.child("motor_status").update({"status": "rolling up"})
-                        db.child("fan_status").update({"status": "OFF"})
                     
                     for i in range(5):
                         for i in range(512):
@@ -375,35 +375,32 @@ def rotate_backward():
                             continue  
             
 def fan_on():
-    global  fan_status
-    while True:
+    global fan_status
     # ENABLED
     # 7:01PM - 6:59AM CLOSE
     
     # DAY 1-3 - temperature > 34 
     # DAY 4-7 - temperature > 34 
     # DAY 8-14 - temperature > 31 
-        if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
-            # if(humidity > 60):
-            if(temperature != 0):
-                if (temperature > max_temp_depending_on_day):
-                    GPIO.output(relay_pin_1, GPIO.HIGH)
-                    fan_status = "ON"
+    while True:
+        # if (humidity > 70):
+        if (temperature > max_temp_depending_on_day):
+            GPIO.output(relay_pin_1, GPIO.HIGH)
+            fan_status = "ON"
 
-                    if check_internet():
-                        db.child("fan_status").update({"status": "ON"})
-                        db.child("motor_status").update({"status": "OFF"})
-                    
-                    time.sleep(300)
-                    
-                    GPIO.output(relay_pin_1, GPIO.LOW)
+            if check_internet():
+                db.child("fan_status").update({"status": "ON"})
+            
+            time.sleep(300)
+            
+            GPIO.output(relay_pin_1, GPIO.LOW)
 
-                    fan_status = "OFF"
+            fan_status = "OFF"
 
-                    if check_internet():
-                        db.child("fan_status").update({"status": "OFF"})
+            if check_internet():
+                db.child("fan_status").update({"status": "OFF"})
 
-                    time.sleep(30)
+            time.sleep(30)
     
 def bulb_on():
     global bulb_status
@@ -411,9 +408,9 @@ def bulb_on():
     # DAY 1-3 - temperature < 33 
     # DAY 4-7 - temperature < 32 
     # DAY 8-14 - temperature < 29 
-    # while (humidity < 60):
-    if(temperature != 0):
-        while (temperature < min_temp_depending_on_day):
+    while True:
+        # if (humidity > 70):
+        if (temperature < min_temp_depending_on_day):
             GPIO.output(relay_pin_2, GPIO.HIGH)
             bulb_status = "ON"    
         
