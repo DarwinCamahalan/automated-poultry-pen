@@ -297,6 +297,7 @@ try:
     def rotate_forward():
         global motor_status, rolling_direction, cover_morning_open
         cover_morning_open = True
+        save_to_json(cover_morning_open)
         while True:
             # ENABLED
             # 7AM - 7PM CLOSE, THIS FUNCTION
@@ -305,15 +306,24 @@ try:
             # DAY 4-7 - temperature > 34
             # DAY 8-14 - temperature > 31
             if MORNING_START_TIME <= datetime.datetime.now().time() <= MORNING_END_TIME:
-                motor_status = "ON"
-                rolling_direction = "Opening Cover."
+
+                # Read the JSON file
+                with open('motor_status.json') as file:
+                    data = json.load(file)
+
+                # Extract the value from the JSON
+                cover_morning_open = data['cover_morning_open']
+
+                if cover_morning_open:
+
+                    motor_status = "ON"
+                    rolling_direction = "Opening Cover."
 
 
-                if check_internet():
-                    db.child("motor_status").update(
-                        {"status": "Opening Cover"})
+                    if check_internet():
+                        db.child("motor_status").update(
+                            {"status": "Opening Cover"})
 
-                if (cover_morning_open == True):
                     for i in range(20): # 20 SPINS
                         print("Motor Rotation Count: ", i)                            
                         for i in range(512):
@@ -325,14 +335,13 @@ try:
                                         MotorPin_B[pin], seq[halfstep][pin])
                                 time.sleep(0.001)
                         cover_morning_open = False
+                        save_to_json(cover_morning_open)
 
+                    motor_status = "OFF"
+                    rolling_direction = ""
 
-
-                motor_status = "OFF"
-                rolling_direction = ""
-
-                if check_internet():
-                    db.child("motor_status").update({"status": "OFF"})
+                    if check_internet():
+                        db.child("motor_status").update({"status": "OFF"})
 
                 if (temperature != 0 or temperature != None):
                     if (temperature < min_temp_depending_on_day):
@@ -361,6 +370,7 @@ try:
                             db.child("motor_status").update({"status": "OFF"})
 
                         cover_morning_open = True
+                        save_to_json(cover_morning_open)
 
                         time.sleep(30)
                         # DAY 1-3 - temperature < 33
@@ -376,7 +386,7 @@ try:
                                 continue
 
     def rotate_backward():
-        global motor_status, rolling_direction
+        global motor_status, rolling_direction, cover_morning_open
 
         while True:
             # ENABLED
@@ -386,32 +396,48 @@ try:
             # DAY 4-7 - temperature < 32
             # DAY 8-14 - temperature < 29
             if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
-                motor_status = "ON"
-                rolling_direction = "Closing Cover."
+                
+                                # Read the JSON file
+                with open('motor_status.json') as file:
+                    data = json.load(file)
 
-                if check_internet():
-                    db.child("motor_status").update(
-                        {"status": "Closing Cover"})
+                # Extract the value from the JSON
+                cover_morning_open = data['cover_morning_open']
 
-                    for i in range(18):
-                        print("Motor Rotation Count: ", i)
-                        for i in range(512):
-                            for halfstep in range(8):
-                                for pin in range(4):
-                                    GPIO.output(
-                                        MotorPin_A[pin], seq[halfstep][pin])
-                                    GPIO.output(
-                                        MotorPin_B[pin], seq[halfstep][pin])
-                                time.sleep(0.001)
+                if cover_morning_open:
+                    time.sleep(60)
+                else:
+                    motor_status = "ON"
+                    rolling_direction = "Closing Cover."
 
-                motor_status = "OFF"
-                rolling_direction = ""
+                    if check_internet():
+                        db.child("motor_status").update(
+                            {"status": "Closing Cover"})
 
-                if check_internet():
-                    db.child("motor_status").update({"status": "OFF"})
+                        for i in range(18):
+                            print("Motor Rotation Count: ", i)
+                            for i in range(512):
+                                for halfstep in range(8):
+                                    for pin in range(4):
+                                        GPIO.output(
+                                            MotorPin_A[pin], seq[halfstep][pin])
+                                        GPIO.output(
+                                            MotorPin_B[pin], seq[halfstep][pin])
+                                    time.sleep(0.001)
 
-                cover_morning_open = True
+                    motor_status = "OFF"
+                    rolling_direction = ""
 
+                    if check_internet():
+                        db.child("motor_status").update({"status": "OFF"})
+
+                    cover_morning_open = True
+                    save_to_json(cover_morning_open)
+
+    def save_to_json(value):
+        data = {"cover_morning_open": value}
+        with open("motor_status.json", "w") as file:
+            json.dump(data, file)
 
     def fan_on():
         global fan_status
