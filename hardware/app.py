@@ -185,7 +185,7 @@ try:
                 print("MLX90640 Camera Error:", str(e))
                 continue  # if error, just read again
 
-            time.sleep(0.7)  # Adjust the delay between readings as needed
+            time.sleep(1)  # Adjust the delay between readings as needed
 
     def should_send_image_30_minutes():
         global send_image
@@ -198,7 +198,7 @@ try:
     def calculate_remaining_days():
         global max_temp_depending_on_day, min_temp_depending_on_day
 
-        start_date = datetime.date(2023, 5, 21)
+        start_date = datetime.date(2023, 5, 24)
         current_date = datetime.date.today()
         remaining_days = (start_date - current_date).days
 
@@ -311,15 +311,17 @@ try:
                     db.child("motor_status").update(
                         {"status": "Opening Cover."})
 
-                for i in range(12):
-                    for i in range(512):
-                        for halfstep in range(8):
-                            for pin in range(4):
-                                GPIO.output(
-                                    MotorPin_A[pin], seq[halfstep][pin])
-                                GPIO.output(
-                                    MotorPin_B[pin], seq[halfstep][pin])
-                            time.sleep(0.001)
+                        for i in range(10):
+                            print("Motor Rotation Count: ", i)                            
+                            for i in range(512):
+                                for halfstep in reversed(range(8)):
+                                    for pin in range(4):
+                                        GPIO.output(
+                                            MotorPin_A[pin], seq[halfstep][pin])
+                                        GPIO.output(
+                                            MotorPin_B[pin], seq[halfstep][pin])
+                                    time.sleep(0.001)
+
 
                 motor_status = "OFF"
                 rolling_direction = ""
@@ -336,9 +338,10 @@ try:
                             db.child("motor_status").update(
                                 {"status": "rolling up"})
 
-                        for i in range(12):
+                        for i in range(10):
+                            print("Motor Rotation Count: ", i)
                             for i in range(512):
-                                for halfstep in reversed(range(8)):
+                                for halfstep in range(8):
                                     for pin in range(4):
                                         GPIO.output(
                                             MotorPin_A[pin], seq[halfstep][pin])
@@ -383,15 +386,16 @@ try:
                     db.child("motor_status").update(
                         {"status": "rolling up"})
 
-                for i in range(12):
-                    for i in range(512):
-                        for halfstep in reversed(range(8)):
-                            for pin in range(4):
-                                GPIO.output(
-                                    MotorPin_A[pin], seq[halfstep][pin])
-                                GPIO.output(
-                                    MotorPin_B[pin], seq[halfstep][pin])
-                            time.sleep(0.001)
+                    for i in range(10):
+                        print("Motor Rotation Count: ", i)
+                        for i in range(512):
+                            for halfstep in range(8):
+                                for pin in range(4):
+                                    GPIO.output(
+                                        MotorPin_A[pin], seq[halfstep][pin])
+                                    GPIO.output(
+                                        MotorPin_B[pin], seq[halfstep][pin])
+                                time.sleep(0.001)
 
                 motor_status = "OFF"
                 rolling_direction = ""
