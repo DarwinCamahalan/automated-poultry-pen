@@ -596,7 +596,8 @@ try:
     fan_thread.start()
     bulb_thread.start()
     should_send_image_30_minutes_thread.start()
-
+    
+pass
 except Exception as e:
     # Handle the error here or simply ignore it
     print(f"An error occurred: {e}")
