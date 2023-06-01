@@ -34,6 +34,7 @@ temperature = 0
 body_temperature = 0
 room_temperature = 0
 send_image = False
+cover_morning_open = False
 max_temp_depending_on_day = 0
 minx_temp_depending_on_day = 0
 
@@ -294,8 +295,8 @@ try:
     # Create functions for stepper motor control
 
     def rotate_forward():
-        global motor_status, rolling_direction
-
+        global motor_status, rolling_direction, cover_morning_open
+        cover_morning_open = True
         while True:
             # ENABLED
             # 7AM - 7PM CLOSE, THIS FUNCTION
@@ -307,20 +308,24 @@ try:
                 motor_status = "ON"
                 rolling_direction = "Opening Cover."
 
+
                 if check_internet():
                     db.child("motor_status").update(
-                        {"status": "Opening Cover."})
+                        {"status": "Opening Cover"})
 
-                        for i in range(10):
-                            print("Motor Rotation Count: ", i)                            
-                            for i in range(512):
-                                for halfstep in reversed(range(8)):
-                                    for pin in range(4):
-                                        GPIO.output(
-                                            MotorPin_A[pin], seq[halfstep][pin])
-                                        GPIO.output(
-                                            MotorPin_B[pin], seq[halfstep][pin])
-                                    time.sleep(0.001)
+                if (cover_morning_open == True):
+                    for i in range(20): # 20 SPINS
+                        print("Motor Rotation Count: ", i)                            
+                        for i in range(512):
+                            for halfstep in reversed(range(8)): # reversed is up (open), no reversed close ()
+                                for pin in range(4):
+                                    GPIO.output(
+                                        MotorPin_A[pin], seq[halfstep][pin])
+                                    GPIO.output(
+                                        MotorPin_B[pin], seq[halfstep][pin])
+                                time.sleep(0.001)
+                        cover_morning_open = False
+
 
 
                 motor_status = "OFF"
@@ -332,13 +337,13 @@ try:
                 if (temperature != 0 or temperature != None):
                     if (temperature < min_temp_depending_on_day):
                         motor_status = "ON"
-                        rolling_direction = "Rolling Backward."
+                        rolling_direction = "Closing Cover."
 
                         if check_internet():
                             db.child("motor_status").update(
-                                {"status": "rolling up"})
+                                {"status": "Closing Cover"})
 
-                        for i in range(10):
+                        for i in range(18):
                             print("Motor Rotation Count: ", i)
                             for i in range(512):
                                 for halfstep in range(8):
@@ -354,6 +359,8 @@ try:
 
                         if check_internet():
                             db.child("motor_status").update({"status": "OFF"})
+
+                        cover_morning_open = True
 
                         time.sleep(30)
                         # DAY 1-3 - temperature < 33
@@ -380,13 +387,13 @@ try:
             # DAY 8-14 - temperature < 29
             if EVENING_START_TIME <= datetime.datetime.now().time() or datetime.datetime.now().time() <= EVENING_END_TIME:
                 motor_status = "ON"
-                rolling_direction = "Rolling Backward."
+                rolling_direction = "Closing Cover."
 
                 if check_internet():
                     db.child("motor_status").update(
-                        {"status": "rolling up"})
+                        {"status": "Closing Cover"})
 
-                    for i in range(10):
+                    for i in range(18):
                         print("Motor Rotation Count: ", i)
                         for i in range(512):
                             for halfstep in range(8):
@@ -402,6 +409,9 @@ try:
 
                 if check_internet():
                     db.child("motor_status").update({"status": "OFF"})
+
+                cover_morning_open = True
+
 
     def fan_on():
         global fan_status
@@ -460,7 +470,7 @@ try:
         while True:
             oled.clear()
             oled.text("   DHT11 Sensor", 1)
-            oled.text("Temperature: {}°C".format(temperature), 3)
+            oled.text("Temperature:{}°C".format(temperature), 3)
             oled.text("Humidity: {}%".format(humidity), 4)
             oled.show()
 
