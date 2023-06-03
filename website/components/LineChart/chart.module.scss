@@ -1,0 +1,17 @@
+.chartBG {
+  margin-top: 2em !important;
+  width: auto !important;
+  height: 70% !important;
+  background-color: #161b22;
+  border: 1px solid #28313d;
+  padding: 0.5em 1em;
+  border-radius: 0.8em;
+  margin: 0 1em 1em 1em;
+  color: white !important;
+}
+
+@media only screen and (max-width: 1000px) {
+  .chartBG {
+    margin-top: 0.5em !important;
+  }
+}

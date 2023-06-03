@@ -55,7 +55,7 @@
 .imgContainer {
   position: absolute;
   width: 64%;
-  height: 92vh;
+  height: 90%;
   margin-top: 4.5em;
   background-color: #161b22;
   z-index: 3;
@@ -70,7 +70,7 @@
   .content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: start;
+    justify-content: flex-start;
     padding: 1em;
     overflow: auto;
     .image {

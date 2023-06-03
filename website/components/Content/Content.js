@@ -19,6 +19,8 @@ import { HiInformationCircle } from "react-icons/hi";
 import { ImSpinner9, ImWarning } from "react-icons/im";
 import { IoBulbSharp } from "react-icons/io5";
 import { GiChicken } from "react-icons/gi";
+import LineChart from "../LineChart/LineChart";
+import LineChartHumidity from "../LineChart/LineChartHumidity";
 
 const Content = () => {
   const [temperature, setTemperature] = useState(null);
@@ -173,144 +175,161 @@ const Content = () => {
   };
 
   return (
-    <div className={styles.contentBG}>
-      {motorStatus !== "OFF" ? (
-        <div className={styles.motorStatus}>
-          <div className={styles.infoContainer}>
-            <h1>
-              <HiInformationCircle className={styles.infoIcon} />
-              Information
-            </h1>
-            <p>Stepper Motor is now {motorStatus}.</p>
-          </div>
-        </div>
-      ) : null}
-
-      <div className={styles.info}>
-        <div className={styles.dayCount}>
-          <BsCalendar4Week className={styles.dayIcon} />
-          <h1>Day</h1>
-          <p>
-            <span>{daysCount}</span>
-          </p>
-        </div>
-
-        <div className={styles.fan}>
-          <BsFan className={iconStyle()} />
-          <h1>Fan</h1>
-          <p>
-            Status:{" "}
-            <span className={getStyle1()}>{`${
-              fanStatus === "OFF" ? "OFF" : "ON"
-            }`}</span>
-          </p>
-        </div>
-
-        <div className={styles.motor}>
-          {motorStatus === "OFF" ? (
-            <RiSensorLine className={styles.motorIcon} />
-          ) : (
-            <ImSpinner9 className={styles.motorONIcon} />
-          )}
-
-          <h1>Motor</h1>
-          <p>
-            Status:{" "}
-            <span className={getStyle2()}>{`${
-              motorStatus === "OFF" ? "OFF" : "ON"
-            }`}</span>
-          </p>
-        </div>
-
-        <div className={styles.bulb}>
-          {bulbStatus === "OFF" ? (
-            <GoLightBulb className={styles.bulbIcon} />
-          ) : (
-            <IoBulbSharp className={styles.bulbON} />
-          )}
-          <h1>Bulb</h1>
-          <p>
-            Status:{" "}
-            <span className={getStyle3()}>
-              {`${bulbStatus === "OFF" ? "OFF" : "ON"}`}
-            </span>
-          </p>
-        </div>
-
-        <div className={styles.buttons}>
-          <p className={buttonStyle1()} onClick={() => handleColorSelection(1)}>
-            Default Color
-          </p>
-          <p className={buttonStyle2()} onClick={() => handleColorSelection(2)}>
-            Grayscale
-          </p>
-          <p className={buttonStyle3()} onClick={() => handleColorSelection(3)}>
-            Contour
-          </p>
-          <p className={buttonStyle4()} onClick={() => handleColorSelection(4)}>
-            Mask
-          </p>
-        </div>
-      </div>
-      {/* IMAGE */}
-      <div className={styles.cameraImage}>
-        {imageUrl && <img src={imageUrl} alt="Camera" />}
-        {toggleMessageColor ? (
-          <div className={styles.colorChangeMessage}>
-            <h1>
-              <ImWarning className={styles.warningIcon} />
-              Changing Color
-            </h1>
-            <p>It will take time, please wait...</p>
+    <>
+      {" "}
+      <div className={styles.contentBG}>
+        {motorStatus !== "OFF" ? (
+          <div className={styles.motorStatus}>
+            <div className={styles.infoContainer}>
+              <h1>
+                <HiInformationCircle className={styles.infoIcon} />
+                Information
+              </h1>
+              <p>Stepper Motor is now {motorStatus}.</p>
+            </div>
           </div>
         ) : null}
-      </div>
-      {/* IMAGE */}
-      <div className={styles.sensors}>
-        <div className={styles.averageTemp}>
-          <FaTemperatureLow className={styles.avgTempIcon} />
-          <h1>Average Temp.</h1>
-          <p>
-            <span>{(temperature + cameraRoomTemp) / 2} °C</span>
-          </p>
-        </div>
-        <div className={styles.dhtSensor}>
-          <BsDeviceSsd className={styles.dhtIcon} />
-          <h1>DHT11</h1>
-          <p>
-            Temperature: <span>{temperature} °C</span>
-          </p>
-          <p>
-            Humidity: <span>{humidity} %</span>
-          </p>
-        </div>
-        <div className={styles.camSensor}>
-          <BiCameraHome className={styles.camIcon} />
-          <h1>MLX90640</h1>
-          <p>
-            Ambient Temp: <span>{cameraRoomTemp} °C</span>
-          </p>
-          <p>
-            Average Body Temp: <span>{cameraBodyTemp} °C</span>
-          </p>
-        </div>
 
-        <div className={styles.camSensor}>
-          <GiChicken className={styles.populationIcon} />
-          <h1>Chicks Population</h1>
-          <p>
-            <span>
-              {100 - (100 - (cameraBodyTemp - cameraRoomTemp)) * 0.1} %
-            </span>
-          </p>
-        </div>
+        <div className={styles.info}>
+          <div className={styles.dayCount}>
+            <BsCalendar4Week className={styles.dayIcon} />
+            <h1>Day</h1>
+            <p>
+              <span>{daysCount}</span>
+            </p>
+          </div>
 
-        <div className={styles.date}>
-          <h1>Start Date</h1>
-          <p>{startDate}</p>
+          <div className={styles.fan}>
+            <BsFan className={iconStyle()} />
+            <h1>Fan</h1>
+            <p>
+              Status:{" "}
+              <span className={getStyle1()}>{`${
+                fanStatus === "OFF" ? "OFF" : "ON"
+              }`}</span>
+            </p>
+          </div>
+
+          <div className={styles.motor}>
+            {motorStatus === "OFF" ? (
+              <RiSensorLine className={styles.motorIcon} />
+            ) : (
+              <ImSpinner9 className={styles.motorONIcon} />
+            )}
+
+            <h1>Motor</h1>
+            <p>
+              Status:{" "}
+              <span className={getStyle2()}>{`${
+                motorStatus === "OFF" ? "OFF" : "ON"
+              }`}</span>
+            </p>
+          </div>
+
+          <div className={styles.bulb}>
+            {bulbStatus === "OFF" ? (
+              <GoLightBulb className={styles.bulbIcon} />
+            ) : (
+              <IoBulbSharp className={styles.bulbON} />
+            )}
+            <h1>Bulb</h1>
+            <p>
+              Status:{" "}
+              <span className={getStyle3()}>
+                {`${bulbStatus === "OFF" ? "OFF" : "ON"}`}
+              </span>
+            </p>
+          </div>
+
+          <div className={styles.buttons}>
+            <p
+              className={buttonStyle1()}
+              onClick={() => handleColorSelection(1)}
+            >
+              Default Color
+            </p>
+            <p
+              className={buttonStyle2()}
+              onClick={() => handleColorSelection(2)}
+            >
+              Grayscale
+            </p>
+            <p
+              className={buttonStyle3()}
+              onClick={() => handleColorSelection(3)}
+            >
+              Contour
+            </p>
+            <p
+              className={buttonStyle4()}
+              onClick={() => handleColorSelection(4)}
+            >
+              Mask
+            </p>
+          </div>
+        </div>
+        {/* IMAGE */}
+        <div className={styles.cameraImage}>
+          {imageUrl && <img src={imageUrl} alt="Camera" />}
+          {toggleMessageColor ? (
+            <div className={styles.colorChangeMessage}>
+              <h1>
+                <ImWarning className={styles.warningIcon} />
+                Changing Color
+              </h1>
+              <p>It will take time, please wait...</p>
+            </div>
+          ) : null}
+        </div>
+        {/* IMAGE */}
+        <div className={styles.sensors}>
+          <div className={styles.averageTemp}>
+            <FaTemperatureLow className={styles.avgTempIcon} />
+            <h1>Average Temp.</h1>
+            <p>
+              <span>{(temperature + cameraRoomTemp) / 2} °C</span>
+            </p>
+          </div>
+          <div className={styles.dhtSensor}>
+            <BsDeviceSsd className={styles.dhtIcon} />
+            <h1>DHT11</h1>
+            <p>
+              Temperature: <span>{temperature} °C</span>
+            </p>
+            <p>
+              Humidity: <span>{humidity} %</span>
+            </p>
+          </div>
+          <div className={styles.camSensor}>
+            <BiCameraHome className={styles.camIcon} />
+            <h1>MLX90640</h1>
+            <p>
+              Ambient Temp: <span>{cameraRoomTemp} °C</span>
+            </p>
+            <p>
+              Average Body Temp: <span>{cameraBodyTemp} °C</span>
+            </p>
+          </div>
+
+          <div className={styles.camSensor}>
+            <GiChicken className={styles.populationIcon} />
+            <h1>Chicks Population</h1>
+            <p>
+              <span>
+                {100 - (100 - (cameraBodyTemp - cameraRoomTemp)) * 0.1} %
+              </span>
+            </p>
+          </div>
+
+          <div className={styles.date}>
+            <h1>Start Date</h1>
+            <p>{startDate}</p>
+          </div>
         </div>
       </div>
-    </div>
+      <LineChart />
+      <LineChartHumidity />
+    </>
   );
 };
 
