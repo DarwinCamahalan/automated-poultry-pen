@@ -59,14 +59,40 @@ const Navbar = () => {
     const fetchImageURLs = async () => {
       try {
         const storageInstance = getStorage();
-        const imagesRef = storageRef(storageInstance, "images_for_AI"); // Reference to the "images_for_AI" node
+        const imagesRef = storageRef(storageInstance, "images_for_AI");
         const result = await listAll(imagesRef);
 
-        const imageURLPromises = result.items.map((item) =>
-          getDownloadURL(item)
-        );
-        const urls = await Promise.all(imageURLPromises);
-        setImageURLs(urls);
+        const imageURLPromises = result.items.map(async (item) => {
+          const fileName = decodeURIComponent(item.name)
+            .split("/")
+            .pop()
+            .split("?")[0];
+
+          const dayNumber = parseInt(fileName.match(/Day (\d+)/)[1], 10);
+          const timeString = fileName.match(/(\d+:\d+\s[AP]M)/)[1];
+          const uploadDate =
+            new Date().setHours(0, 0, 0, 0) +
+            (dayNumber - 1) * 24 * 60 * 60 * 1000;
+
+          return {
+            url: await getDownloadURL(item),
+            uploadDate,
+            fileName,
+            timeString,
+          };
+        });
+
+        const imageURLs = await Promise.all(imageURLPromises);
+        const sortedURLs = imageURLs.sort((a, b) => {
+          // Sort by upload date (ascending order), or by filename if upload dates are the same
+          if (a.uploadDate !== b.uploadDate) {
+            return a.uploadDate - b.uploadDate; // Ascending order by upload date
+          } else {
+            return a.fileName.localeCompare(b.fileName); // Ascending order by filename
+          }
+        });
+
+        setImageURLs(sortedURLs.map((item) => item.url));
       } catch (error) {
         console.error("Error fetching image URLs:", error);
       }
