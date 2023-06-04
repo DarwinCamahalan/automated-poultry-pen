@@ -1,0 +1,1921 @@
+{
+  "bulb_status": {
+    "status": "OFF"
+  },
+  "camera_sensor": {
+    "bodyTemp": 31.05110921628051,
+    "roomTemp": 32.3401085382147
+  },
+  "day_tracker": {
+    "daysLeft": 11,
+    "startDate": "2023-05-21"
+  },
+  "dht_sensor": {
+    "humidity": 77,
+    "temperature": 31
+  },
+  "fan_status": {
+    "status": "OFF"
+  },
+  "image_color": {
+    "color": 1
+  },
+  "line_chart": {
+    "1": {
+      "6:25 PM": {
+        "camera_temperature": 16.125246384995826,
+        "dht_temperature": 31
+      }
+    },
+    "5:15 PM": {
+      "camera_temperature": 36,
+      "dht_temperature": 35
+    },
+    "6:15 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "6:16 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "6:17 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "6:18 PM": {
+      "camera_temperature": 33,
+      "dht_temperature": 31
+    },
+    "6:37 PM": {
+      "camera_temperature": 16,
+      "dht_temperature": 31
+    },
+    "6:45 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "6:49 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "6:50 PM": {
+      "camera_temperature": 33,
+      "dht_temperature": 31
+    },
+    "7:00 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "7:04 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "7:19 PM": {
+      "camera_temperature": 16,
+      "dht_temperature": 31
+    },
+    "7:22 PM": {
+      "camera_temperature": 16,
+      "dht_temperature": 31
+    },
+    "7:23 PM": {
+      "camera_temperature": 16,
+      "dht_temperature": 31
+    },
+    "7:37 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "7:38 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "7:40 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    },
+    "7:51 PM": {
+      "camera_temperature": 32,
+      "dht_temperature": 31
+    }
+  },
+  "line_chart_humidity": {
+    "1": {
+      "6:25 PM": {
+        "dht_humidity": 76
+      }
+    },
+    "5:15 PM": {
+      "dht_humidity": 70
+    },
+    "6:00 PM": {
+      "dht_humidity": 77
+    },
+    "6:15 PM": {
+      "dht_humidity": 75
+    },
+    "6:16 PM": {
+      "dht_humidity": 75
+    },
+    "6:17 PM": {
+      "dht_humidity": 76
+    },
+    "6:18 PM": {
+      "dht_humidity": 76
+    },
+    "6:37 PM": {
+      "dht_humidity": 76
+    },
+    "6:45 PM": {
+      "dht_humidity": 76
+    },
+    "6:49 PM": {
+      "dht_humidity": 76
+    },
+    "6:50 PM": {
+      "dht_humidity": 76
+    },
+    "7:00 PM": {
+      "dht_humidity": 77
+    },
+    "7:04 PM": {
+      "dht_humidity": 77
+    },
+    "7:19 PM": {
+      "dht_humidity": 77
+    },
+    "7:22 PM": {
+      "dht_humidity": 77
+    },
+    "7:23 PM": {
+      "dht_humidity": 77
+    },
+    "7:37 PM": {
+      "dht_humidity": 77
+    },
+    "7:38 PM": {
+      "dht_humidity": 77
+    },
+    "7:40 PM": {
+      "dht_humidity": 77
+    },
+    "7:51 PM": {
+      "dht_humidity": 77
+    },
+    "8:00 PM": {
+      "dht_humidity": 77
+    }
+  },
+  "manual_edit_line_graph": {
+    "humidity": [
+      null,
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      },
+      {
+        "9:00 AM": {
+          "humidity": 77
+        },
+        "10:00 AM": {
+          "humidity": 77
+        },
+        "11:00 AM": {
+          "humidity": 77
+        },
+        "12:00 PM": {
+          "humidity": 77
+        },
+        "1:00 PM": {
+          "humidity": 77
+        },
+        "2:00 PM": {
+          "humidity": 77
+        },
+        "3:00 PM": {
+          "humidity": 77
+        },
+        "4:00 PM": {
+          "humidity": 77
+        },
+        "5:00 PM": {
+          "humidity": 77
+        },
+        "6:00 PM": {
+          "humidity": 77
+        },
+        "7:00 PM": {
+          "humidity": 77
+        },
+        "8:00 PM": {
+          "humidity": 77
+        },
+        "9:00 PM": {
+          "humidity": 77
+        },
+        "10:00 PM": {
+          "humidity": 77
+        },
+        "11:00 PM": {
+          "humidity": 77
+        },
+        "12:00 AM": {
+          "humidity": 77
+        }
+      }
+    ],
+    "temperatures": [
+      null,
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      },
+      {
+        "9:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "1:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "2:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "3:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "4:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "5:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "6:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "7:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "8:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "9:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "10:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "11:00 PM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        },
+        "12:00 AM": {
+          "camera_temperature": 32.3401085382147,
+          "dht_temperature": 31
+        }
+      }
+    ]
+  },
+  "motor_status": {
+    "status": "OFF"
+  }
+}

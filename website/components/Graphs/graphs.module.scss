@@ -5,6 +5,23 @@
   h1 {
     font-size: 1.4em;
   }
+  .graphs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    margin: 2em 0;
+    a {
+      background-color: #161b22;
+      border: 1px solid #28313d;
+      padding: 0.5em 1em;
+      border-radius: 0.8em;
+      margin: 0 1em 1em 1em;
+      color: white;
+      text-decoration: none !important; /* Add this line to remove the underline */
+    }
+  }
   .chart {
     display: flex;
     flex-wrap: wrap;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import styles from "./graphs.module.scss";
 import { Line } from "react-chartjs-2";
 import { app, db } from "../firebaseConfig";
@@ -73,7 +74,25 @@ const AllGraphs = () => {
 
   // Helper function to format temperature chart data
   const formatTemperatureChartData = (chartData) => {
-    const labels = Object.keys(chartData);
+    const timeLabels = [
+      "9:00 AM",
+      "10:00 AM",
+      "11:00 AM",
+      "12:00 PM",
+      "1:00 PM",
+      "2:00 PM",
+      "3:00 PM",
+      "4:00 PM",
+      "5:00 PM",
+      "6:00 PM",
+      "7:00 PM",
+      "8:00 PM",
+      "9:00 PM",
+      "10:00 PM",
+      "11:00 PM",
+      "12:00 AM",
+    ];
+
     const cameraTemperatureData = Object.values(chartData).map(
       (entry) => entry.camera_temperature
     );
@@ -82,7 +101,7 @@ const AllGraphs = () => {
     );
 
     return {
-      labels,
+      labels: timeLabels,
       datasets: [
         {
           label: "MLX90640 Temperature",
@@ -104,13 +123,31 @@ const AllGraphs = () => {
 
   // Helper function to format humidity chart data
   const formatHumidityChartData = (chartData) => {
-    const labels = Object.keys(chartData);
+    const timeLabels = [
+      "9:00 AM",
+      "10:00 AM",
+      "11:00 AM",
+      "12:00 PM",
+      "1:00 PM",
+      "2:00 PM",
+      "3:00 PM",
+      "4:00 PM",
+      "5:00 PM",
+      "6:00 PM",
+      "7:00 PM",
+      "8:00 PM",
+      "9:00 PM",
+      "10:00 PM",
+      "11:00 PM",
+      "12:00 AM",
+    ];
+
     const humidityData = Object.values(chartData).map(
       (entry) => entry.humidity
     );
 
     return {
-      labels,
+      labels: timeLabels,
       datasets: [
         {
           label: "Humidity",
@@ -175,7 +212,6 @@ const AllGraphs = () => {
             ))
           : null}
       </div>
-
       <h2>Humidity Charts</h2>
       <div className={styles.chart}>
         {humidityChartData.length > 0
@@ -225,6 +261,10 @@ const AllGraphs = () => {
               </div>
             ))
           : null}
+      </div>
+
+      <div className={styles.graphs}>
+        <Link href="/">Go Back</Link>
       </div>
     </div>
   );
