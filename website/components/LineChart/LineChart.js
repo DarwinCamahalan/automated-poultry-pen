@@ -87,39 +87,30 @@ const LineChart = () => {
         const cameraSensorData = cameraSensorSnapshot.val();
         const dhtSensorData = dhtSensorSnapshot.val();
 
-        if (cameraSensorData) {
+        if (cameraSensorData && dhtSensorData) {
           const cameraSensorTemperature = Math.round(cameraSensorData);
+          const dhtSensorTemperature = dhtSensorData;
+
           setChartData((prevData) => ({
-            ...prevData,
+            labels: [...prevData.labels, getTimestampString()],
             datasets: [
               {
                 ...prevData.datasets[0],
                 data: [...prevData.datasets[0].data, cameraSensorTemperature],
               },
-              prevData.datasets[1],
-            ],
-            labels: [...prevData.labels, getTimestampString()],
-          }));
-          const lineChartCameraTempRef = ref(
-            db,
-            `line_chart/${getTimestampString()}/camera_temperature`
-          );
-          set(lineChartCameraTempRef, cameraSensorTemperature);
-        }
-
-        if (dhtSensorData) {
-          const dhtSensorTemperature = dhtSensorData;
-          setChartData((prevData) => ({
-            ...prevData,
-            datasets: [
-              prevData.datasets[0],
               {
                 ...prevData.datasets[1],
                 data: [...prevData.datasets[1].data, dhtSensorTemperature],
               },
             ],
-            labels: [...prevData.labels, getTimestampString()],
           }));
+
+          const lineChartCameraTempRef = ref(
+            db,
+            `line_chart/${getTimestampString()}/camera_temperature`
+          );
+          set(lineChartCameraTempRef, cameraSensorTemperature);
+
           const lineChartDHTTempRef = ref(
             db,
             `line_chart/${getTimestampString()}/dht_temperature`
@@ -195,7 +186,7 @@ const LineChart = () => {
         fetchData();
         fetchPreviousData();
       }
-    }, 60000); // Fetch every hour
+    }, 3600000); // Fetch every hour (3600000 milliseconds)
 
     fetchData();
     fetchPreviousData();

@@ -72,9 +72,12 @@ const Content = () => {
     const dayTackerRef = ref(db, "day_tracker");
 
     onValue(dhtSensorRef, (snapshot) => {
-      const { temperature, humidity } = snapshot.val();
-      setTemperature(temperature);
-      setHumidity(humidity);
+      const sensorData = snapshot.val();
+      if (sensorData) {
+        const { temperature, humidity } = sensorData;
+        setTemperature(temperature);
+        setHumidity(humidity);
+      }
     });
 
     onValue(cameraSensorRef, (snapshot) => {
