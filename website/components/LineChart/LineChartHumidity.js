@@ -24,14 +24,14 @@ Chart.register(
   Legend
 );
 
-const LineChart = () => {
+const LineChartHumidity = () => {
   const dhtSensorRef = useRef(null);
 
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
       {
-        label: "DHT11 Humidity",
+        label: "DHT Sensor Humidity",
         data: [],
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
@@ -48,30 +48,6 @@ const LineChart = () => {
     return `${formattedHours}:${minutes} ${ampm}`;
   };
 
-  const generateTimeLabels = () => {
-    const labels = [];
-    const startDate = new Date();
-    startDate.setHours(9, 0, 0); // Start at 9 AM
-    const endDate = new Date();
-    endDate.setHours(12, 0, 0); // End at 12 AM
-
-    const currentDate = new Date(startDate);
-
-    while (currentDate <= endDate) {
-      const formattedTime = currentDate.toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      });
-      labels.push(formattedTime);
-      currentDate.setHours(currentDate.getHours() + 1);
-    }
-
-    return labels;
-  };
-
-  const [graphNumber, setGraphNumber] = useState(1);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,7 +59,6 @@ const LineChart = () => {
           setChartData((prevData) => ({
             ...prevData,
             datasets: [
-              prevData.datasets[0],
               {
                 ...prevData.datasets[0],
                 data: [...prevData.datasets[0].data, dhtSensorHumidity],
@@ -91,11 +66,11 @@ const LineChart = () => {
             ],
             labels: [...prevData.labels, getTimestampString()],
           }));
-          const lineChartDHTHumidityRef = ref(
+          const lineChartDHTTempRef = ref(
             db,
-            `line_chart_humidity/${graphNumber}/${getTimestampString()}/dht_humidity`
+            `line_chart_humidity/${getTimestampString()}/dht_humidity`
           );
-          set(lineChartDHTHumidityRef, dhtSensorHumidity);
+          set(lineChartDHTTempRef, dhtSensorHumidity);
         }
       } catch (error) {
         console.log("Error fetching data: ", error);
@@ -104,14 +79,11 @@ const LineChart = () => {
 
     const fetchPreviousData = async () => {
       try {
-        const lineChartSnapshot = await get(
-          ref(db, `line_chart_humidity/${graphNumber}`)
-        );
+        const lineChartSnapshot = await get(ref(db, `line_chart_humidity`));
         const lineChartData = lineChartSnapshot.val();
 
         if (lineChartData) {
           const labels = Object.keys(lineChartData);
-
           const dhtSensorData = labels.map(
             (label) => lineChartData[label].dht_humidity
           );
@@ -134,16 +106,17 @@ const LineChart = () => {
     fetchData();
     fetchPreviousData();
 
-    const interval = setInterval(fetchData, 3600000);
+    const interval = setInterval(fetchData, 60000);
 
     return () => {
       clearInterval(interval);
       if (dhtSensorRef.current) off(dhtSensorRef.current);
     };
-  }, [graphNumber]);
+  }, []);
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top",
@@ -153,7 +126,7 @@ const LineChart = () => {
       },
       title: {
         display: true,
-        text: "DHT11 Humidity",
+        text: "Humidity",
         color: "white",
       },
     },
@@ -183,10 +156,8 @@ const LineChart = () => {
   };
 
   if (chartData.labels.length === 0) {
-    return <div>Loading Line Chart...</div>;
+    return null;
   }
-
-  options.scales.x.labels = generateTimeLabels();
 
   return (
     <div className={styles.chartBG}>
@@ -195,4 +166,4 @@ const LineChart = () => {
   );
 };
 
-export default LineChart;
+export default LineChartHumidity;

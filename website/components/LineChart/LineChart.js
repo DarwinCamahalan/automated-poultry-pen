@@ -55,8 +55,6 @@ const LineChart = () => {
     return `${formattedHours}:${minutes} ${ampm}`;
   };
 
-  const [graphNumber, setGraphNumber] = useState(1);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,7 +67,7 @@ const LineChart = () => {
         const dhtSensorData = dhtSensorSnapshot.val();
 
         if (cameraSensorData) {
-          const cameraSensorTemperature = cameraSensorData;
+          const cameraSensorTemperature = Math.round(cameraSensorData);
           setChartData((prevData) => ({
             ...prevData,
             datasets: [
@@ -83,7 +81,7 @@ const LineChart = () => {
           }));
           const lineChartCameraTempRef = ref(
             db,
-            `line_chart/${graphNumber}/${getTimestampString()}/camera_temperature`
+            `line_chart/${getTimestampString()}/camera_temperature`
           );
           set(lineChartCameraTempRef, cameraSensorTemperature);
         }
@@ -103,7 +101,7 @@ const LineChart = () => {
           }));
           const lineChartDHTTempRef = ref(
             db,
-            `line_chart/${graphNumber}/${getTimestampString()}/dht_temperature`
+            `line_chart/${getTimestampString()}/dht_temperature`
           );
           set(lineChartDHTTempRef, dhtSensorTemperature);
         }
@@ -114,9 +112,7 @@ const LineChart = () => {
 
     const fetchPreviousData = async () => {
       try {
-        const lineChartSnapshot = await get(
-          ref(db, `line_chart/${graphNumber}`)
-        );
+        const lineChartSnapshot = await get(ref(db, `line_chart`));
         const lineChartData = lineChartSnapshot.val();
 
         if (lineChartData) {
@@ -150,17 +146,18 @@ const LineChart = () => {
     fetchData();
     fetchPreviousData();
 
-    const interval = setInterval(fetchData, 3600000);
+    const interval = setInterval(fetchData, 60000);
 
     return () => {
       clearInterval(interval);
       if (cameraSensorRef.current) off(cameraSensorRef.current);
       if (dhtSensorRef.current) off(dhtSensorRef.current);
     };
-  }, [graphNumber]);
+  }, []);
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top",

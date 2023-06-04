@@ -327,8 +327,10 @@ const Content = () => {
           </div>
         </div>
       </div>
-      <LineChart />
-      <LineChartHumidity />
+      <div className={styles.charts}>
+        <LineChart />
+        <LineChartHumidity />
+      </div>
     </>
   );
 };
