@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "./graphs.module.scss";
 import { Line } from "react-chartjs-2";
 import { app, db } from "../firebaseConfig";
-import { get, ref } from "firebase/database";
+import { get, ref, onValue } from "firebase/database";
 import {
   Chart,
   CategoryScale,
@@ -70,6 +70,38 @@ const AllGraphs = () => {
     );
 
     fetchData();
+
+    // Real-time listener for temperature data
+    onValue(ref(db, "manual_edit_line_graph/temperatures"), (snapshot) => {
+      const temperatureData = snapshot.val();
+      if (temperatureData) {
+        const temperatureCharts = Object.values(temperatureData)
+          .slice(1)
+          .map((chartData, index) => ({
+            id: index + 1,
+            data: formatTemperatureChartData(chartData),
+          }));
+        setTemperatureChartData(temperatureCharts);
+      } else {
+        setTemperatureChartData([]);
+      }
+    });
+
+    // Real-time listener for humidity data
+    onValue(ref(db, "manual_edit_line_graph/humidity"), (snapshot) => {
+      const humidityData = snapshot.val();
+      if (humidityData) {
+        const humidityCharts = Object.values(humidityData)
+          .slice(1)
+          .map((chartData, index) => ({
+            id: index + 1,
+            data: formatHumidityChartData(chartData),
+          }));
+        setHumidityChartData(humidityCharts);
+      } else {
+        setHumidityChartData([]);
+      }
+    });
   }, []);
 
   // Helper function to format temperature chart data
