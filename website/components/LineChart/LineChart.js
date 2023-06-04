@@ -32,13 +32,13 @@ const LineChart = () => {
     labels: [],
     datasets: [
       {
-        label: "Camera Sensor Temperature",
+        label: "MLX90640 Temperature",
         data: [],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
-        label: "DHT Sensor Temperature",
+        label: "DHT11 Temperature",
         data: [],
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
@@ -191,11 +191,11 @@ const LineChart = () => {
         0
       );
 
-      if (now >= fetchTime) {
+      if (now >= fetchTime && now.getMinutes() === 0) {
         fetchData();
         fetchPreviousData();
       }
-    }, 3600000); // Fetch every hour
+    }, 60000); // Fetch every hour
 
     fetchData();
     fetchPreviousData();

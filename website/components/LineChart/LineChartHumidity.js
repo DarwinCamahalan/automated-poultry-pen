@@ -153,11 +153,11 @@ const LineChartHumidity = () => {
         0
       );
 
-      if (now >= fetchTime) {
+      if (now >= fetchTime && now.getMinutes() === 0) {
         fetchData();
         fetchPreviousData();
       }
-    }, 3600000); // Fetch every hour
+    }, 60000); // Check every minute and fetch data if the minutes value is zero
 
     fetchData();
     fetchPreviousData();
