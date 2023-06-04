@@ -49,6 +49,27 @@ const LineChartHumidity = () => {
   };
 
   useEffect(() => {
+    const resetChartData = async () => {
+      try {
+        const today = new Date().toLocaleDateString();
+        const lineChartHumidityRef = ref(db, "line_chart_humidity");
+        const lineChartHumiditySnapshot = await get(lineChartHumidityRef);
+        const lineChartHumidityData = lineChartHumiditySnapshot.val();
+
+        if (lineChartHumidityData) {
+          const chartDates = Object.keys(lineChartHumidityData);
+          const outdatedDates = chartDates.filter((date) => date !== today);
+
+          for (const date of outdatedDates) {
+            const dateRef = ref(lineChartHumidityRef, date);
+            set(dateRef, null);
+          }
+        }
+      } catch (error) {
+        console.log("Error resetting chart data: ", error);
+      }
+    };
+
     const fetchData = async () => {
       try {
         const dhtSensorSnapshot = await get(ref(db, `dht_sensor/humidity`));
@@ -66,11 +87,11 @@ const LineChartHumidity = () => {
             ],
             labels: [...prevData.labels, getTimestampString()],
           }));
-          const lineChartDHTTempRef = ref(
+          const lineChartDHTHumidityRef = ref(
             db,
             `line_chart_humidity/${getTimestampString()}/dht_humidity`
           );
-          set(lineChartDHTTempRef, dhtSensorHumidity);
+          set(lineChartDHTHumidityRef, dhtSensorHumidity);
         }
       } catch (error) {
         console.log("Error fetching data: ", error);
@@ -79,13 +100,15 @@ const LineChartHumidity = () => {
 
     const fetchPreviousData = async () => {
       try {
-        const lineChartSnapshot = await get(ref(db, `line_chart_humidity`));
-        const lineChartData = lineChartSnapshot.val();
+        const lineChartHumiditySnapshot = await get(
+          ref(db, `line_chart_humidity`)
+        );
+        const lineChartHumidityData = lineChartHumiditySnapshot.val();
 
-        if (lineChartData) {
-          const labels = Object.keys(lineChartData);
+        if (lineChartHumidityData) {
+          const labels = Object.keys(lineChartHumidityData);
           const dhtSensorData = labels.map(
-            (label) => lineChartData[label].dht_humidity
+            (label) => lineChartHumidityData[label].dht_humidity
           );
 
           setChartData({
@@ -103,13 +126,45 @@ const LineChartHumidity = () => {
       }
     };
 
+    const resetInterval = setInterval(() => {
+      const now = new Date();
+      const resetTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        8,
+        59,
+        0
+      );
+
+      if (now >= resetTime) {
+        resetChartData();
+      }
+    }, 60000); // Check every minute if reset time has passed
+
+    const fetchInterval = setInterval(() => {
+      const now = new Date();
+      const fetchTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        now.getHours(),
+        0,
+        0
+      );
+
+      if (now >= fetchTime) {
+        fetchData();
+        fetchPreviousData();
+      }
+    }, 3600000); // Fetch every hour
+
     fetchData();
     fetchPreviousData();
 
-    const interval = setInterval(fetchData, 60000);
-
     return () => {
-      clearInterval(interval);
+      clearInterval(resetInterval);
+      clearInterval(fetchInterval);
       if (dhtSensorRef.current) off(dhtSensorRef.current);
     };
   }, []);

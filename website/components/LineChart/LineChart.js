@@ -56,6 +56,27 @@ const LineChart = () => {
   };
 
   useEffect(() => {
+    const resetChartData = async () => {
+      try {
+        const today = new Date().toLocaleDateString();
+        const lineChartRef = ref(db, "line_chart");
+        const lineChartSnapshot = await get(lineChartRef);
+        const lineChartData = lineChartSnapshot.val();
+
+        if (lineChartData) {
+          const chartDates = Object.keys(lineChartData);
+          const outdatedDates = chartDates.filter((date) => date !== today);
+
+          for (const date of outdatedDates) {
+            const dateRef = ref(lineChartRef, date);
+            set(dateRef, null);
+          }
+        }
+      } catch (error) {
+        console.log("Error resetting chart data: ", error);
+      }
+    };
+
     const fetchData = async () => {
       try {
         const cameraSensorSnapshot = await get(
@@ -143,13 +164,45 @@ const LineChart = () => {
       }
     };
 
+    const resetInterval = setInterval(() => {
+      const now = new Date();
+      const resetTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        8,
+        59,
+        0
+      );
+
+      if (now >= resetTime) {
+        resetChartData();
+      }
+    }, 60000); // Check every minute if reset time has passed
+
+    const fetchInterval = setInterval(() => {
+      const now = new Date();
+      const fetchTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        now.getHours(),
+        0,
+        0
+      );
+
+      if (now >= fetchTime) {
+        fetchData();
+        fetchPreviousData();
+      }
+    }, 3600000); // Fetch every hour
+
     fetchData();
     fetchPreviousData();
 
-    const interval = setInterval(fetchData, 60000);
-
     return () => {
-      clearInterval(interval);
+      clearInterval(resetInterval);
+      clearInterval(fetchInterval);
       if (cameraSensorRef.current) off(cameraSensorRef.current);
       if (dhtSensorRef.current) off(dhtSensorRef.current);
     };
