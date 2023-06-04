@@ -1,4 +1,6 @@
 import styles from "./navbar.module.scss";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import icon from "../../public/favicon.png";
 import { useEffect, useState } from "react";
@@ -54,6 +56,8 @@ const Navbar = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const imagesPerPage = 12;
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchImageURLs = async () => {
@@ -147,14 +151,16 @@ const Navbar = () => {
           <GiHamburgerMenu onClick={() => setToggle(!toggle)} />
         </div>
         <div className={styles.logo}>
-          <div className={styles.layout}>
-            <Image
-              className={styles.img}
-              src={icon}
-              alt="Poultry Monitoring System"
-            />
-            <h1>Poultry Monitoring System</h1>
-          </div>
+          <Link href="/">
+            <div className={styles.layout}>
+              <Image
+                className={styles.img}
+                src={icon}
+                alt="Poultry Monitoring System"
+              />
+              <h1>Poultry Monitoring System</h1>
+            </div>
+          </Link>
         </div>
       </div>
     </>

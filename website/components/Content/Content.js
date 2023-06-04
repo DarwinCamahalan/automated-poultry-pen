@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./content.module.scss";
+import Link from "next/link";
 import { db } from "../firebaseConfig";
 import { onValue, ref, set } from "firebase/database";
 import {
@@ -333,6 +334,9 @@ const Content = () => {
       <div className={styles.charts}>
         <LineChart />
         <LineChartHumidity />
+      </div>
+      <div className={styles.graphs}>
+        <Link href="/graphs">See More Charts</Link>
       </div>
     </>
   );

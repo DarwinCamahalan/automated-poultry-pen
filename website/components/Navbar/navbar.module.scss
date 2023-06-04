@@ -120,20 +120,33 @@
       transform: scale(1.1);
     }
   }
+  // navbar.module.scss
+
   .logo {
+    &:hover {
+      cursor: pointer;
+    }
+    a {
+      color: white;
+      text-decoration: none !important; /* Add this line to remove the underline */
+    }
     .layout {
       display: flex;
       flex-direction: row;
       align-items: center;
+
       .img {
         width: 3em;
         height: auto;
       }
+
       h1 {
+        color: white;
         margin-left: 0.3em;
         font-weight: 600;
         font-size: 1.3em;
         letter-spacing: 1px;
+        text-decoration: none !important; /* Add this line to remove the underline */
       }
     }
   }

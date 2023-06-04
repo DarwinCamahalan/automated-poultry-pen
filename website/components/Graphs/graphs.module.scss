@@ -1,0 +1,41 @@
+.chartBG {
+  h2 {
+    margin: 1.5em 1em 0.5em 1em;
+  }
+  h1 {
+    font-size: 1.4em;
+  }
+  .chart {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .tempChart,
+    .humidityChart {
+      margin-top: 0.7em !important;
+      width: 47.35% !important;
+      height: 30em !important;
+      background-color: #161b22;
+      border: 1px solid #28313d;
+      padding: 0.5em 1em;
+      border-radius: 0.8em;
+      margin: 0 1em 1em 1em;
+      color: white !important;
+      padding: 1em 1em 2.5em 1em;
+    }
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .chartBG {
+    .chart {
+      .tempChart,
+      .humidityChart {
+        margin-top: 0 !important;
+        width: 100% !important;
+        height: 20em !important;
+      }
+    }
+  }
+}
