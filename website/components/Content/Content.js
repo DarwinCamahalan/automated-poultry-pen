@@ -315,15 +315,7 @@ const Content = () => {
             </p>
           </div>
 
-          <div className={styles.camSensor}>
-            <GiChicken className={styles.populationIcon} />
-            <h1>Chicks Population</h1>
-            <p>
-              <span>
-                {100 - (100 - (cameraBodyTemp - cameraRoomTemp)) * 0.1} %
-              </span>
-            </p>
-          </div>
+   
 
           <div className={styles.date}>
             <h1>Start Date</h1>
