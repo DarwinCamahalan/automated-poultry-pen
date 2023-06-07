@@ -57,6 +57,15 @@
 | 6            | IN3         |
 | 5            | IN4         |
 
+> 2 CHANNEL RELAY TO RASPBERRY PI
+
+| PIN NO.      | LABEL       |
+| -----------  | ----------- |
+| 23           | GPI0 23     |
+| 24           | GPIO 24     |
+| 4            | GPIO 4      |
+
+
 
 ## RASPBERRY PI 3 MODEL B V1.2 PINS
 
