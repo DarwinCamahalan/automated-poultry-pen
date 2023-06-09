@@ -321,7 +321,7 @@ const Content = () => {
                 Below 39 <span>Cold Stress</span>
               </p>
               <p>
-                Below 41 <span>Heat Stress</span>
+                Above 41 <span>Heat Stress</span>
               </p>
             </div>
           </div>
