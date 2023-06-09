@@ -314,7 +314,7 @@ const Content = () => {
             <BiCameraHome className={styles.camIcon} />
             <h1>MLX90640</h1>
             <p>
-              Ambient Temp: <span>{cameraRoomTemp} °C</span>
+              Average Body Temp: <span>{cameraBodyTemp} °C</span>
             </p>
             <div className={styles.stress}>
               <p>
