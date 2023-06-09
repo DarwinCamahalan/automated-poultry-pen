@@ -195,6 +195,10 @@ const Content = () => {
         ) : null}
 
         <div className={styles.info}>
+          <div className={styles.date}>
+            <h1>Start Date</h1>
+            <p>{startDate}</p>
+          </div>
           <div className={styles.dayCount}>
             <BsCalendar4Week className={styles.dayIcon} />
             <h1>Day</h1>
@@ -244,33 +248,6 @@ const Content = () => {
               </span>
             </p>
           </div>
-
-          <div className={styles.buttons}>
-            <p
-              className={buttonStyle1()}
-              onClick={() => handleColorSelection(1)}
-            >
-              Default Color
-            </p>
-            <p
-              className={buttonStyle2()}
-              onClick={() => handleColorSelection(2)}
-            >
-              Grayscale
-            </p>
-            <p
-              className={buttonStyle3()}
-              onClick={() => handleColorSelection(3)}
-            >
-              Contour
-            </p>
-            <p
-              className={buttonStyle4()}
-              onClick={() => handleColorSelection(4)}
-            >
-              Mask
-            </p>
-          </div>
         </div>
         {/* IMAGE */}
         <div className={styles.cameraImage}>
@@ -287,13 +264,6 @@ const Content = () => {
         </div>
         {/* IMAGE */}
         <div className={styles.sensors}>
-          <div className={styles.averageTemp}>
-            <FaTemperatureLow className={styles.avgTempIcon} />
-            <h1>Average Temp.</h1>
-            <p>
-              <span>{(temperature + cameraRoomTemp) / 2} °C</span>
-            </p>
-          </div>
           <div className={styles.dhtSensor}>
             <BsDeviceSsd className={styles.dhtIcon} />
             <h1>DHT11</h1>
@@ -303,6 +273,42 @@ const Content = () => {
             <p>
               Humidity: <span>{humidity} %</span>
             </p>
+          </div>
+          <div className={styles.dayHumidity}>
+            <h1>Days Humidity</h1>
+            <div className={styles.content}>
+              <span>1-3:</span>
+              <ul>
+                <li>
+                  Below 30 <span> LOW</span>
+                </li>
+                <li>
+                  Above 50<span>HIGH</span>
+                </li>
+              </ul>
+            </div>
+            <div className={styles.content}>
+              <span>4-7:</span>
+              <ul>
+                <li>
+                  Below 40 <span> LOW</span>
+                </li>
+                <li>
+                  Above 70<span>HIGH</span>
+                </li>
+              </ul>
+            </div>
+            <div className={styles.content}>
+              <span>8-14:</span>
+              <ul>
+                <li>
+                  Below 50 <span> LOW</span>
+                </li>
+                <li>
+                  Above 70<span>HIGH</span>
+                </li>
+              </ul>
+            </div>
           </div>
           <div className={styles.camSensor}>
             <BiCameraHome className={styles.camIcon} />
@@ -314,13 +320,18 @@ const Content = () => {
               Average Body Temp: <span>{cameraBodyTemp} °C</span>
             </p>
           </div>
-
-   
-
-          <div className={styles.date}>
-            <h1>Start Date</h1>
-            <p>{startDate}</p>
-          </div>
+        </div>
+      </div>
+      <div className={styles.bottomContent}>
+        <div className={styles.detectedColor}>
+          <p>
+            Detected Chicks: <span>RED</span>
+          </p>
+        </div>
+        <div className={styles.detectedColor}>
+          <p>
+            Ambient Temperature: <span>Dark Blue to White</span>
+          </p>
         </div>
       </div>
       <div className={styles.charts}>
