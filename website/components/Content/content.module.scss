@@ -376,6 +376,17 @@
 
     .camSensor {
       position: relative;
+      .stress {
+        margin-top: 0.8em;
+        p {
+          letter-spacing: 1px;
+          font-weight: 1em;
+          span {
+            font-size: 1em;
+            font-weight: 600;
+          }
+        }
+      }
       .camIcon {
         position: absolute;
         top: -10%;

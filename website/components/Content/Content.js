@@ -319,6 +319,14 @@ const Content = () => {
             <p>
               Average Body Temp: <span>{cameraBodyTemp} °C</span>
             </p>
+            <div className={styles.stress}>
+              <p>
+                Below 39 <span>Cold Stress</span>
+              </p>
+              <p>
+                Below 41 <span>Heat Stress</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
