@@ -72,6 +72,17 @@
 ![329800870_769578984791846_5458783927692876063_n](https://user-images.githubusercontent.com/120079195/233627070-a2ad264f-b04e-40ef-8d2b-aadf2713a473.jpg)
 
 
+---
+
+## Project Website Monitoring System
+
+![image](https://github.com/DarwinCamahalan/automated-poultry-pen/assets/120079195/e26e675d-9b01-49d7-9039-81c56c793a22)
+![image](https://github.com/DarwinCamahalan/automated-poultry-pen/assets/120079195/05950554-91b0-4092-96b9-2cd830b1b67c)
+![image](https://github.com/DarwinCamahalan/automated-poultry-pen/assets/120079195/4a981232-a154-4368-bb7a-e1490c4d9386)
+![image](https://github.com/DarwinCamahalan/automated-poultry-pen/assets/120079195/142caa53-66e3-4f58-8842-b657e4ea47f5)
+
+
+
 
 
 
