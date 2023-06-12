@@ -76,8 +76,6 @@
 
 ## Project Website Monitoring System
 
-<img src="https://github.com/DarwinCamahalan/automated-poultry-pen/assets/120079195/e26e675d-9b01-49d7-9039-81c56c793a22" width=50%>
-
 ![image](https://github.com/DarwinCamahalan/automated-poultry-pen/assets/120079195/e26e675d-9b01-49d7-9039-81c56c793a22)
 ![image](https://github.com/DarwinCamahalan/automated-poultry-pen/assets/120079195/05950554-91b0-4092-96b9-2cd830b1b67c)
 ![image](https://github.com/DarwinCamahalan/automated-poultry-pen/assets/120079195/4a981232-a154-4368-bb7a-e1490c4d9386)
